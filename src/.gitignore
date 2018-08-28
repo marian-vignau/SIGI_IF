@@ -1,0 +1,4 @@
+*.pyc
+*.pyd
+/.idea
+db*.db
