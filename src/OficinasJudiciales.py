@@ -2,7 +2,6 @@
 import wx
 from sqlalchemy.exc import IntegrityError
 
-import wxtools
 from wxSQAlch import Mapper, ListViewObject
 from vistas import OficinasJudiciales
 import models

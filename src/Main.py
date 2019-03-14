@@ -27,7 +27,6 @@ class ctrlMain (Main):
             self.list.change_item_list(row)
 
     def lsPrincipalOnLeftDClick(self, event):
-        print(self.list)
         idCausa = self.list.get_key()
         dlg = EdicionCausa.ctrlEdicionCausa(self, idCausa)
         dlg.ShowModal()
@@ -35,7 +34,6 @@ class ctrlMain (Main):
 
     def scBuscarOnSearchButton(self, event):
         event.Skip()
-
 
     def mnuCausaAgregarOnMenuSelection(self, event):
         dlg = EdicionCausa.ctrlEdicionCausa(self)

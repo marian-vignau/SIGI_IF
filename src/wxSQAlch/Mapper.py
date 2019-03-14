@@ -33,6 +33,7 @@ class MapObj(object):
             self.HasFocus = widget.HasFocus
 
     def GetDateValue(self):
+        """Special getter for"""
         w = self.widget.GetValue()
         if w.IsValid():
             d = datetime.date(w.year, w.month, w.day)
@@ -64,28 +65,33 @@ class MapList(MapObj):
     '''
     def __init__(self, widget, field, lista=None):
         super().__init__(widget, field)
+        self.Clear = self.ClearList
+        self.GetValue = self.GetValueList
+        self.SetValue = self.SetValueList
         if lista and len(lista)>0:
-            for desc,ub in lista:
-                self.widget.Append(desc,ub)
+            for desc, ub in lista:
+                self.widget.Append(desc, ub)
             self.widget.SetSelection(0)
 
     def reload(self, lista):
         self.widget.Clear()
         if lista and len(lista)>0:
-            for desc,ub in lista:
-                self.widget.Append(desc,ub)
+            for desc, ub in lista:
+                self.widget.Append(desc, ub)
             self.widget.SetSelection(0)
 
-    def Clear(self):
+    def ClearList(self):
         self.widget.SetSelection(0)
 
-    def GetValue(self):
+    def GetValueList(self):
         try:
-            return self.widget.GetClientData(self.widget.GetSelection())
-        except:
+            selec = self.widget.GetSelection()
+            return self.widget.GetClientData(selec)
+        except Exception as e:
+            print(">>>> Error en %s", e)
             return 0
 
-    def SetValue(self,value):
+    def SetValueList(self,value):
         if self.widget.GetCount()>0:
             anterior=self.widget.GetSelection()
             Dirty = False
@@ -154,9 +160,9 @@ class MapNumeric(MapObj):
 
 
 class Mapper(object):
-    '''Toma los campos del modelo, y se fija si existen wid_gets con igual nombre
-    en el frame, en ése caso usa las funciones SetValue y _getValue para asignar
-    datos desde el registro al wid_get, y viceversa
+    '''Toma los campos del modelo, y se fija si existen widgets con igual nombre
+    en el frame, en ése caso usa las funciones SetValue y GetValue para asignar
+    datos desde el registro al widget, y viceversa
     '''
     def __init__(self, *args, **kargs):
         '''carga en el diccionario las funciones con nombre estándar,
@@ -167,19 +173,17 @@ class Mapper(object):
             self.__setattr__(obj.field, obj)
 
     def from_model(self, model):
-        ''''''
-
+        '''Set values on widgets from model.'''
         for field in self.fields:
             try:
                 value = getattr(model, field.field)
                 field.SetValue(value)
             except Exception as inst:
-                pass
                 print("Error en %s, SetValue" % field)
                 print(inst)
 
     def clear(self):
-        ''''''
+        '''Clear all widgets.'''
         for field in self.fields:
             try:
                 field.Clear()
@@ -189,8 +193,7 @@ class Mapper(object):
                 print(inst)
 
     def to_model(self, model):
-        '''llama a cada fnc _getvalue establecida
-        del widget al modelo'''
+        '''Set values from widgets on model'''
         for field in self.fields:
             try:
                 value = field.GetValue()
@@ -209,12 +212,12 @@ class Mapper(object):
                 print("Error en %s, Enable" % field)
                 print(inst)
 
-    def Dirty(self, model):
-        '''usa _getfocus para comparar cada campo con el valor del modelo'''
+    def dirty(self, model):
+        '''usa getvalue para comparar cada campo con el valor del modelo'''
         for field in self.fields:
-            n = field.GetValue()  #= n=wid_get._getValue()
-            m = getattr(model, field)  #= m=model.field
-            if n != m:
+            on_widget = field.GetValue()  #= n=wid_get._getValue()
+            on_model = getattr(model, field)  #= m=model.field
+            if on_widget != on_model:
                 return True
         return False
 

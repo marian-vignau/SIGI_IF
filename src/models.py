@@ -2,18 +2,30 @@
 from sqlalchemy import Column, ForeignKey, Table, Text, Integer, DateTime, Date, create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import func
 
+FILEPATH = 'db1.db'
+SQLALCHEMY_ECHO = False
 Base = declarative_base()
 metadata = Base.metadata
 
 
 class GenericTable():
     def __repr__(self):
-        campos=[str(x).split('.')[1] for x in self.__table__._columns]
+        """Prints every attrib in the object."""
+        campos = [str(x).split('.')[1] for x in self.__table__._columns]
         list=[]
         for c in campos:
-            list.append('%s="%s"'%(c,repr(getattr(self,c))))
-        return "<%s (%s)>\n"%(self.idObject(),';'.join(list))
+            list.append('%s="%s"' % (c, repr(getattr(self, c))))
+        return "%s <%s>\n" % (self.__tablename__, ';'.join(list))
+
+    def __init__(self, **kargs):
+        """Generic init, every arg is (name, value) of some attrib on table."""
+        for key, value in kargs:
+            if key in self.__table__._columns:
+                self.__setattr__(key, value)
+            else:
+                raise(ValueError, "{} column not exists on table {}".format(key, self.__tablename__))
 
 
 class TableEstadoCausa(Base, GenericTable):
@@ -34,8 +46,9 @@ class TableObjeto(Base, GenericTable):
     __tablename__ = 'TableObjeto'
 
     idObjeto = Column(Integer, primary_key=True)
-    objetoRelacionado = Column(ForeignKey('TableObjeto.idObjeto'))
-    descipcion = Column(Text)
+    objetoRelacionado = Column(ForeignKey('TableObjeto.idObjeto'),
+                               nullable=True)
+    descripcion = Column(Text)
     ubicacionFisica = Column(Text)
     directorioFotos = Column(Text)
     fechaEntrada = Column(DateTime)
@@ -170,6 +183,7 @@ class AUDTableUsuario(AUDFecha):
     __tablename__ = 'AUDTableUsuario'
 
     idFecha = Column(ForeignKey('AUDFecha.idFecha'), primary_key=True)
+    #idUsuario = Column(ForeignKey('AUDFecha.idUsuario'), primary_key=True)
     idUsuario = Column(Text)
     datosAntiguos = Column(Text)
     datosActualizados = Column(Text)
@@ -273,9 +287,61 @@ class TableRelEscObj(Base, GenericTable):
     TableEscrito1 = relationship('TableEscrito', primaryjoin='TableRelEscObj.idEscrito == TableEscrito.idEscrito')
     TableObjeto = relationship('TableObjeto')
 
-"""
-"""
-engine = create_engine('sqlite:///db4.db', echo=True)
-sessions = sessionmaker()
-sessions.configure(bind=engine)
-Base.metadata.create_all(engine)
+
+
+def objects_rel_causa(idCausa):
+    s1 = sessions()
+    q1 = s1.query(TableObjeto) \
+        .join(TableRelEscObj,
+              TableObjeto.idObjeto == TableRelEscObj.idObjeto) \
+        .filter(TableRelEscObj.idCausa == idCausa)
+    return q1
+
+def objects_rel_escrito(idCausa, idEscrito):
+    s1 = sessions()
+    q1 = s1.query(TableRelEscObj) \
+        .filter(TableRelEscObj.idCausa == idCausa) \
+        .filter(TableRelEscObj.idEscrito == idEscrito)
+    list = [row.idObjeto for row in q1]
+    return list
+
+def escritos_rel_objeto(idCausa, idObjeto):
+    s1 = sessions()
+    q1 = s1.query(TableRelEscObj) \
+        .filter(TableRelEscObj.idCausa == idCausa) \
+        .filter(TableRelEscObj.idObjeto == idObjeto)
+    list = [row.idEscrito for row in q1]
+    return list
+
+def relac_escrito_objeto(idCausa, idEscrito, idObjeto):
+    s1 = sessions()
+    o1 = TableRelEscObj(
+        idCausa=idCausa,
+        idEscrito=idEscrito,
+        idObjeto=idObjeto)
+    s1.append(o1)
+    s1.commit()
+
+def next_objeto_id():
+    last_id = sessions().query(func.max(TableObjeto.idObjeto)).first()
+    if last_id[0] is None:
+        return 0
+    else:
+        return last_id[0] + 1
+
+
+def init_engine():
+    global engine
+    global sessions
+    global Base
+    print(FILEPATH)
+    print(SQLALCHEMY_ECHO)
+
+    engine = create_engine('sqlite:///' + FILEPATH, echo=SQLALCHEMY_ECHO)
+    sessions = sessionmaker()
+    sessions.configure(bind=engine)
+    Base.metadata.create_all(engine)
+
+init_engine()
+
+

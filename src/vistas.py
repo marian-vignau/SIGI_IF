@@ -418,13 +418,8 @@ class PanelEscrito ( wx.Panel ):
 		
 		fgSizer2.Add( self.m_staticText21, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
-		bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
-		
 		self.tcFotos = wx.DirPickerCtrl( self, wx.ID_ANY, wx.EmptyString, u"Elija un directorio", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE|wx.DIRP_SMALL )
-		bSizer11.Add( self.tcFotos, 1, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		fgSizer2.Add( bSizer11, 0, wx.EXPAND, 5 )
+		fgSizer2.Add( self.tcFotos, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_staticText22 = wx.StaticText( self, wx.ID_ANY, u"Ingreso", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText22.Wrap( -1 )
@@ -465,29 +460,15 @@ class PanelObjeto ( wx.Panel ):
 		fgSizer2.SetFlexibleDirection( wx.BOTH )
 		fgSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_staticText18 = wx.StaticText( self, wx.ID_ANY, u"Identificador", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText18.Wrap( -1 )
-		
-		fgSizer2.Add( self.m_staticText18, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		self.tcIdEscrito = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer2.Add( self.tcIdEscrito, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.m_staticText30 = wx.StaticText( self, wx.ID_ANY, u"Objeto relacionado", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText30 = wx.StaticText( self, wx.ID_ANY, u"Pertenece a:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText30.Wrap( -1 )
 		
 		fgSizer2.Add( self.m_staticText30, 0, wx.ALL, 5 )
 		
-		bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
+		self.lblObjetoRelacionado = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.lblObjetoRelacionado.Wrap( -1 )
 		
-		self.tcObjetoRelacionado = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer14.Add( self.tcObjetoRelacionado, 1, wx.ALL, 5 )
-		
-		self.btnObjetoRelacionado = wx.Button( self, wx.ID_ANY, u"ver...", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
-		bSizer14.Add( self.btnObjetoRelacionado, 0, wx.ALL, 5 )
-		
-		
-		fgSizer2.Add( bSizer14, 0, wx.EXPAND, 5 )
+		fgSizer2.Add( self.lblObjetoRelacionado, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_staticText19 = wx.StaticText( self, wx.ID_ANY, u"Descripción", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText19.Wrap( -1 )
@@ -510,16 +491,8 @@ class PanelObjeto ( wx.Panel ):
 		
 		fgSizer2.Add( self.m_staticText21, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
-		bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.tcFotos = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer11.Add( self.tcFotos, 1, wx.ALL|wx.EXPAND, 5 )
-		
-		self.btnFotos = wx.Button( self, wx.ID_ANY, u"ir...", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
-		bSizer11.Add( self.btnFotos, 0, wx.ALL, 5 )
-		
-		
-		fgSizer2.Add( bSizer11, 0, wx.EXPAND, 5 )
+		self.tcFotos = wx.DirPickerCtrl( self, wx.ID_ANY, wx.EmptyString, u"Elija un directorio", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE|wx.DIRP_SMALL )
+		fgSizer2.Add( self.tcFotos, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_staticText22 = wx.StaticText( self, wx.ID_ANY, u"Ingreso", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText22.Wrap( -1 )
@@ -540,21 +513,9 @@ class PanelObjeto ( wx.Panel ):
 		
 		self.SetSizer( fgSizer2 )
 		self.Layout()
-		
-		# Connect Events
-		self.btnObjetoRelacionado.Bind( wx.EVT_BUTTON, self.btnObjetoRelacionadoOnButtonClick )
-		self.btnFotos.Bind( wx.EVT_BUTTON, self.btnFotosOnButtonClick )
 	
 	def __del__( self ):
 		pass
-	
-	
-	# Virtual event handlers, overide them in your derived class
-	def btnObjetoRelacionadoOnButtonClick( self, event ):
-		event.Skip()
-	
-	def btnFotosOnButtonClick( self, event ):
-		event.Skip()
 	
 
 ###########################################################################
@@ -564,7 +525,7 @@ class PanelObjeto ( wx.Panel ):
 class EdicionCausa ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Edición Causa", pos = wx.DefaultPosition, size = wx.Size( 622,540 ), style = wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.RESIZE_BORDER )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Edición Causa", pos = wx.DefaultPosition, size = wx.Size( 781,540 ), style = wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.RESIZE_BORDER )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -596,17 +557,40 @@ class EdicionCausa ( wx.Dialog ):
 		
 		bSizer25 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.btAdd = wx.Button( self, wx.ID_ANY, u"+", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
-		bSizer25.Add( self.btAdd, 0, wx.ALL, 5 )
+		self.btAddEscrito = wx.Button( self, wx.ID_ANY, u"+", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
+		bSizer25.Add( self.btAddEscrito, 0, wx.ALL, 5 )
 		
-		self.btDelete = wx.Button( self, wx.ID_ANY, u"-", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
-		bSizer25.Add( self.btDelete, 0, wx.ALL, 5 )
+		self.btDeleteEscrito = wx.Button( self, wx.ID_ANY, u"-", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
+		bSizer25.Add( self.btDeleteEscrito, 0, wx.ALL, 5 )
+		
+		
+		bSizer25.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+		
+		self.btVincular = wx.Button( self, wx.ID_ANY, u"Vincular", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer25.Add( self.btVincular, 0, wx.ALL, 5 )
+		
+		
+		bSizer25.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+		
+		self.btAddObjeto = wx.Button( self, wx.ID_ANY, u"+", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
+		bSizer25.Add( self.btAddObjeto, 0, wx.ALL, 5 )
+		
+		self.btDeleteObjeto = wx.Button( self, wx.ID_ANY, u"-", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
+		bSizer25.Add( self.btDeleteObjeto, 0, wx.ALL, 5 )
 		
 		
 		bSizer3.Add( bSizer25, 0, wx.EXPAND, 5 )
 		
+		bSizer35 = wx.BoxSizer( wx.HORIZONTAL )
+		
 		self.lsEscritos = wx.ListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT )
-		bSizer3.Add( self.lsEscritos, 1, wx.ALL|wx.EXPAND, 5 )
+		bSizer35.Add( self.lsEscritos, 1, wx.ALL|wx.EXPAND, 5 )
+		
+		self.trcObjetos = wx.TreeCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TR_DEFAULT_STYLE|wx.TR_FULL_ROW_HIGHLIGHT|wx.TR_HAS_BUTTONS )
+		bSizer35.Add( self.trcObjetos, 1, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		bSizer3.Add( bSizer35, 1, wx.EXPAND, 5 )
 		
 		
 		bSizer1.Add( bSizer3, 1, wx.EXPAND, 5 )
@@ -620,9 +604,17 @@ class EdicionCausa ( wx.Dialog ):
 		# Connect Events
 		self.btReestablecer.Bind( wx.EVT_BUTTON, self.btReestablecerOnButtonClick )
 		self.btGuardar.Bind( wx.EVT_BUTTON, self.btGuardarOnButtonClick )
-		self.btAdd.Bind( wx.EVT_BUTTON, self.btAddOnButtonClick )
-		self.btDelete.Bind( wx.EVT_BUTTON, self.btDeleteOnButtonClick )
+		self.btAddEscrito.Bind( wx.EVT_BUTTON, self.btAddEscritoOnButtonClick )
+		self.btDeleteEscrito.Bind( wx.EVT_BUTTON, self.btDeleteEscritoOnButtonClick )
+		self.btVincular.Bind( wx.EVT_BUTTON, self.btVincularOnButtonClick )
+		self.btAddObjeto.Bind( wx.EVT_BUTTON, self.btAddObjetoOnButtonClick )
+		self.btDeleteObjeto.Bind( wx.EVT_BUTTON, self.btDeleteObjetoOnButtonClick )
 		self.lsEscritos.Bind( wx.EVT_LEFT_DCLICK, self.lsEscritosOnLeftDClick )
+		self.lsEscritos.Bind( wx.EVT_LIST_ITEM_SELECTED, self.lsEscritosOnListItemSelected )
+		self.trcObjetos.Bind( wx.EVT_LEFT_DCLICK, self.trcObjetosOnLeftDClick )
+		self.trcObjetos.Bind( wx.EVT_LEFT_DOWN, self.trcObjetosOnLeftDown )
+		self.trcObjetos.Bind( wx.EVT_TREE_SEL_CHANGED, self.trcObjetosOnTreeSelChanged )
+		self.trcObjetos.Bind( wx.EVT_TREE_SEL_CHANGING, self.trcObjetosOnTreeSelChanging )
 	
 	def __del__( self ):
 		pass
@@ -635,56 +627,38 @@ class EdicionCausa ( wx.Dialog ):
 	def btGuardarOnButtonClick( self, event ):
 		event.Skip()
 	
-	def btAddOnButtonClick( self, event ):
+	def btAddEscritoOnButtonClick( self, event ):
 		event.Skip()
 	
-	def btDeleteOnButtonClick( self, event ):
+	def btDeleteEscritoOnButtonClick( self, event ):
+		event.Skip()
+	
+	def btVincularOnButtonClick( self, event ):
+		event.Skip()
+	
+	def btAddObjetoOnButtonClick( self, event ):
+		event.Skip()
+	
+	def btDeleteObjetoOnButtonClick( self, event ):
 		event.Skip()
 	
 	def lsEscritosOnLeftDClick( self, event ):
 		event.Skip()
 	
-
-###########################################################################
-## Class ConfirmarBorrar
-###########################################################################
-
-class ConfirmarBorrar ( wx.Dialog ):
+	def lsEscritosOnListItemSelected( self, event ):
+		event.Skip()
 	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"¿Borrar?", pos = wx.DefaultPosition, size = wx.Size( 484,530 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-		
-		bSizer36 = wx.BoxSizer( wx.VERTICAL )
-		
-		self.panel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		bSizer36.Add( self.panel, 1, wx.EXPAND |wx.ALL, 5 )
-		
-		bSizer231 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		
-		bSizer231.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-		
-		self.btCancelar = wx.Button( self, wx.ID_ANY, u"Cancelar", wx.DefaultPosition, wx.DefaultSize, 0 )
-		
-		self.btCancelar.SetDefault()
-		bSizer231.Add( self.btCancelar, 0, wx.ALL, 5 )
-		
-		self.btBorrar = wx.Button( self, wx.ID_ANY, u"&Borrar", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer231.Add( self.btBorrar, 0, wx.ALL, 5 )
-		
-		
-		bSizer36.Add( bSizer231, 0, wx.EXPAND, 5 )
-		
-		
-		self.SetSizer( bSizer36 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
+	def trcObjetosOnLeftDClick( self, event ):
+		event.Skip()
 	
-	def __del__( self ):
-		pass
+	def trcObjetosOnLeftDown( self, event ):
+		event.Skip()
+	
+	def trcObjetosOnTreeSelChanged( self, event ):
+		event.Skip()
+	
+	def trcObjetosOnTreeSelChanging( self, event ):
+		event.Skip()
 	
 
 ###########################################################################
@@ -722,9 +696,21 @@ class EdicionObjeto ( wx.Dialog ):
 		self.Layout()
 		
 		self.Centre( wx.BOTH )
+		
+		# Connect Events
+		self.btReestablecer.Bind( wx.EVT_BUTTON, self.btReestablecerOnButtonClick )
+		self.btGuardar.Bind( wx.EVT_BUTTON, self.btGuardarOnButtonClick )
 	
 	def __del__( self ):
 		pass
+	
+	
+	# Virtual event handlers, overide them in your derived class
+	def btReestablecerOnButtonClick( self, event ):
+		event.Skip()
+	
+	def btGuardarOnButtonClick( self, event ):
+		event.Skip()
 	
 
 ###########################################################################
@@ -734,7 +720,7 @@ class EdicionObjeto ( wx.Dialog ):
 class EdicionEscrito ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Edición Escrito", pos = wx.DefaultPosition, size = wx.Size( 453,493 ), style = wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.RESIZE_BORDER )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Edición Escrito", pos = wx.DefaultPosition, size = wx.Size( 463,493 ), style = wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX|wx.RESIZE_BORDER )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -742,20 +728,6 @@ class EdicionEscrito ( wx.Dialog ):
 		
 		self.paEscrito = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer16.Add( self.paEscrito, 1, wx.EXPAND |wx.ALL, 5 )
-		
-		bSizer23 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.btAdd = wx.Button( self, wx.ID_ANY, u"+", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
-		bSizer23.Add( self.btAdd, 0, wx.ALL, 5 )
-		
-		self.btDelete = wx.Button( self, wx.ID_ANY, u"-", wx.DefaultPosition, wx.Size( 20,20 ), 0 )
-		bSizer23.Add( self.btDelete, 0, wx.ALL, 5 )
-		
-		
-		bSizer16.Add( bSizer23, 0, wx.EXPAND, 5 )
-		
-		self.trcObjetos = wx.TreeCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TR_DEFAULT_STYLE )
-		bSizer16.Add( self.trcObjetos, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		bSizer231 = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -778,9 +750,6 @@ class EdicionEscrito ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
-		self.btAdd.Bind( wx.EVT_BUTTON, self.btAddOnButtonClick )
-		self.btDelete.Bind( wx.EVT_BUTTON, self.btDeleteOnButtonClick )
-		self.trcObjetos.Bind( wx.EVT_TREE_SEL_CHANGED, self.trcObjetosOnTreeSelChanged )
 		self.btReestablecer.Bind( wx.EVT_BUTTON, self.btReestablecerOnButtonClick )
 		self.btGuardar.Bind( wx.EVT_BUTTON, self.btGuardarOnButtonClick )
 	
@@ -789,15 +758,6 @@ class EdicionEscrito ( wx.Dialog ):
 	
 	
 	# Virtual event handlers, overide them in your derived class
-	def btAddOnButtonClick( self, event ):
-		event.Skip()
-	
-	def btDeleteOnButtonClick( self, event ):
-		event.Skip()
-	
-	def trcObjetosOnTreeSelChanged( self, event ):
-		event.Skip()
-	
 	def btReestablecerOnButtonClick( self, event ):
 		event.Skip()
 	
@@ -980,42 +940,5 @@ class Login ( wx.Dialog ):
 	
 	def btAceptarOnButtonClick( self, event ):
 		event.Skip()
-	
-
-###########################################################################
-## Class EdiciolnEstado
-###########################################################################
-
-class EdiciolnEstado ( wx.Dialog ):
-	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 465,61 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-		
-		fgSizer4 = wx.FlexGridSizer( 0, 3, 0, 0 )
-		fgSizer4.AddGrowableCol( 1 )
-		fgSizer4.SetFlexibleDirection( wx.BOTH )
-		fgSizer4.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.m_staticText25 = wx.StaticText( self, wx.ID_ANY, u"Estado", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText25.Wrap( -1 )
-		
-		fgSizer4.Add( self.m_staticText25, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		self.tcEstado = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer4.Add( self.tcEstado, 1, wx.ALL|wx.EXPAND, 5 )
-		
-		self.m_button18 = wx.Button( self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer4.Add( self.m_button18, 0, wx.ALL, 5 )
-		
-		
-		self.SetSizer( fgSizer4 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-	
-	def __del__( self ):
-		pass
 	
 

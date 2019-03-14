@@ -3,8 +3,6 @@ from sqlalchemy.exc import IntegrityError
 
 from wxSQAlch import Mapper
 import models
-import wxtools
-
 
 from vistas import PanelCausa
 import OficinasJudiciales
@@ -21,7 +19,7 @@ class ctrlPanelCausa(PanelCausa):
             Mapper.MapObj(self.tcExpteOtro, "expteOtro"),
             Mapper.MapObj(self.tcObservaciones, "observaciones" ),
             Mapper.MapObj(self.tcCaratula, "caratula"),
-            Mapper.MapList(self.chDestinatario, "idDestinatario", self.loadEstados()))
+            Mapper.MapList(self.chDestinatario, "idDestinatario", self.loadDestinatarios()))
 
     def loadEstados(self):
         s1 = models.sessions()
@@ -31,8 +29,8 @@ class ctrlPanelCausa(PanelCausa):
 
     def loadDestinatarios(self):
         s1 = models.sessions()
-        valores = [(row.descripcion, row.id) for
-                   row in s1.query(models.TableEstadoCausa)]
+        valores = [(row.nombre, row.id) for
+                   row in s1.query(models.TableDestinatario)]
         return valores
 
     def to_model(self, model):

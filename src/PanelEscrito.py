@@ -14,7 +14,7 @@ class ctrlPanelEscrito(PanelEscrito):
             MapObj(self.dpIngreso, "fechaEntrada"),
             MapObj(self.dpSalida, "fechaSalida")
         )
-        print(repr(self.mapper))
+        #print(repr(self.mapper))
 
     def to_model(self, model):
         self.mapper.to_model(model)
