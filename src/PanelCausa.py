@@ -1,3 +1,9 @@
+"""
+To show fields of causas
+
+"""
+__author__ = "María Andrea Vignau"
+
 import wx
 from sqlalchemy.exc import IntegrityError
 
@@ -8,29 +14,31 @@ from vistas import PanelCausa
 import OficinasJudiciales
 
 
-
 class ctrlPanelCausa(PanelCausa):
-    def __init__(self,  parent):
+    def __init__(self, parent):
         super().__init__(parent)
         self.mapper = Mapper.Mapper(
             Mapper.MapObj(self.tcExpteJud, "expteJud"),
             Mapper.MapObj(self.tcExptePol, "exptePol"),
             Mapper.MapList(self.chEstado, "idEstado", self.loadEstados()),
             Mapper.MapObj(self.tcExpteOtro, "expteOtro"),
-            Mapper.MapObj(self.tcObservaciones, "observaciones" ),
+            Mapper.MapObj(self.tcObservaciones, "observaciones"),
             Mapper.MapObj(self.tcCaratula, "caratula"),
-            Mapper.MapList(self.chDestinatario, "idDestinatario", self.loadDestinatarios()))
+            Mapper.MapList(
+                self.chDestinatario, "idDestinatario", self.loadDestinatarios()
+            ),
+        )
 
     def loadEstados(self):
         s1 = models.sessions()
-        valores = [(row.descripcion, row.id) for
-                   row in s1.query(models.TableEstadoCausa)]
+        valores = [
+            (row.descripcion, row.id) for row in s1.query(models.TableEstadoCausa)
+        ]
         return valores
 
     def loadDestinatarios(self):
         s1 = models.sessions()
-        valores = [(row.nombre, row.id) for
-                   row in s1.query(models.TableDestinatario)]
+        valores = [(row.nombre, row.id) for row in s1.query(models.TableDestinatario)]
         return valores
 
     def to_model(self, model):
@@ -47,8 +55,8 @@ class ctrlPanelCausa(PanelCausa):
     # Virtual event handlers, overide them in your derived class
     def lblEstadoOnLeftDClick(self, event):
         dlg = wx.TextEntryDialog(
-                self, 'Ingrese la descripción del nuevo estado',
-                'Editar Estado', '')
+            self, "Ingrese la descripción del nuevo estado", "Editar Estado", ""
+        )
 
         dlg.SetValue("")
 
@@ -63,9 +71,7 @@ class ctrlPanelCausa(PanelCausa):
                 self.mapper.idEstado.SetValue(modelEstado.id)
 
             except IntegrityError:
-                wx.MessageDialog(
-                    self, "El estado ya se encuentra agregado"
-                ).ShowModal()
+                wx.MessageDialog(self, "El estado ya se encuentra agregado").ShowModal()
 
                 s1.rollback()
 

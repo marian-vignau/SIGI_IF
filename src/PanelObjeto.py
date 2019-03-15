@@ -1,17 +1,23 @@
+"""
+To show fields of objetos
+
+"""
+__author__ = "María Andrea Vignau"
+
 from vistas import PanelObjeto
 from wxSQAlch.Mapper import Mapper, MapObj, MapList
 import models
 
 
 class ctrlPanelObjeto(PanelObjeto):
-    def __init__(self,  parent, ObjetoRelacionado = ""):
+    def __init__(self, parent, ObjetoRelacionado=""):
         super().__init__(parent)
         self.mapper = Mapper(
             MapObj(self.tcDescripcion, "descripcion"),
             MapObj(self.tcUbicacionFisica, "ubicacionFisica"),
             MapObj(self.tcFotos, "directorioFotos"),
             MapObj(self.dpIngreso, "fechaEntrada"),
-            MapObj(self.dpSalida, "fechaSalida")
+            MapObj(self.dpSalida, "fechaSalida"),
         )
         self.lblObjetoRelacionado.SetLabel(ObjetoRelacionado)
 

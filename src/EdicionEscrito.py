@@ -1,3 +1,10 @@
+"""
+To edit escritos
+
+"""
+__author__ = "María Andrea Vignau"
+
+
 import wx
 from sqlalchemy.exc import IntegrityError
 
@@ -9,26 +16,30 @@ from wxSQAlch.Tools import replace_widget
 
 BORRAR_LABEL = "Borrar"
 
-class ctrlEdicionEscrito (EdicionEscrito):
-    def __init__(self,  parent, idCausa, idEscrito=None, delete=False):
+
+class ctrlEdicionEscrito(EdicionEscrito):
+    def __init__(self, parent, idCausa, idEscrito=None, delete=False):
         super().__init__(parent)
         self.paEscritoNvo = PanelEscrito.ctrlPanelEscrito(self, idCausa)
         replace_widget(self, self.paEscrito, self.paEscritoNvo)
         self.Layout()
         self.resultado = False
         if idEscrito is None:
-            #self.enable_edicion_escritos(False)
+            # self.enable_edicion_escritos(False)
             self.model = models.TableEscrito()
         else:
             s1 = models.sessions()
-            self.model = s1.query(models.TableEscrito)\
-                .filter(models.TableEscrito.idCausa == idCausa)\
-                .filter(models.TableEscrito.idEscrito == idEscrito).first()
+            self.model = (
+                s1.query(models.TableEscrito)
+                .filter(models.TableEscrito.idCausa == idCausa)
+                .filter(models.TableEscrito.idEscrito == idEscrito)
+                .first()
+            )
             self.paEscritoNvo.from_model(self.model)
             s1.expunge(self.model)
         if delete:
             self.paEscritoNvo.mapper.enable(False)
-            self.btGuardar.SetLabel(BORRAR_LABEL )
+            self.btGuardar.SetLabel(BORRAR_LABEL)
 
     def btReestablecerOnButtonClick(self, event):
         self.paEscritoNvo.from_model(self.model)
@@ -45,7 +56,7 @@ class ctrlEdicionEscrito (EdicionEscrito):
                 self.resultado = True
                 # self.enable_edicion_escritos(True)
             except IntegrityError as e:
-                self.error =  "El escrito no puede ser borrado\n" + str(e)
+                self.error = "El escrito no puede ser borrado\n" + str(e)
 
         else:
             try:
@@ -57,10 +68,7 @@ class ctrlEdicionEscrito (EdicionEscrito):
                 self.error = "El escrito no puede ser grabado\n" + str(e)
 
         if self.error:
-            wx.MessageDialog(
-                self, self.error).ShowModal()
+            wx.MessageDialog(self, self.error).ShowModal()
             s1.rollback()
         else:
             self.Close()
-
-

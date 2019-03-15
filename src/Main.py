@@ -1,5 +1,8 @@
+"""
+Show main window
+"""
+__author__ = "María Andrea Vignau"
 
-import wx
 
 from wxSQAlch import ListViewObject
 from vistas import Main
@@ -7,8 +10,8 @@ import models
 import EdicionCausa
 
 
-class ctrlMain (Main):
-    def __init__(self,  parent):
+class ctrlMain(Main):
+    def __init__(self, parent):
         super().__init__(parent)
         self.init_lista_causas()
 
@@ -16,11 +19,13 @@ class ctrlMain (Main):
         # for normal, simple columns, you can add them like this:
         self.list = ListViewObject.ListViewObject(
             self.lsPrincipal,
-            [ListViewObject.Column("Exp Judicial", "expteJud"),
-             ListViewObject.Column("Carátula", "caratula"),
-             ListViewObject.Column("Exp Policial", "exptePol"),
-             ListViewObject.Column("Id", "idCausa")],
-            itemkey="idCausa"
+            [
+                ListViewObject.Column("Exp Judicial", "expteJud"),
+                ListViewObject.Column("Carátula", "caratula"),
+                ListViewObject.Column("Exp Policial", "exptePol"),
+                ListViewObject.Column("Id", "idCausa"),
+            ],
+            itemkey="idCausa",
         )
         s1 = models.sessions()
         for row in s1.query(models.TableCausa).all():
@@ -39,6 +44,3 @@ class ctrlMain (Main):
         dlg = EdicionCausa.ctrlEdicionCausa(self)
         dlg.ShowModal()
         self.list.change_item_list(dlg.model)
-
-
-

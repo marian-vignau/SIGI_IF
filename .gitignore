@@ -2,6 +2,8 @@
 /*
 !.gitignore
 !/src
+!/docs
+!/tests
 !/formbuiderProject
 !*.bat
 !*.txt

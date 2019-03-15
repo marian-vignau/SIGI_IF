@@ -1,9 +1,15 @@
+"""
+To show fields of escritos
+
+"""
+__author__ = "María Andrea Vignau"
 
 from vistas import PanelEscrito
 from wxSQAlch.Mapper import Mapper, MapObj
 
+
 class ctrlPanelEscrito(PanelEscrito):
-    def __init__(self,  parent, idCausa):
+    def __init__(self, parent, idCausa):
         self.idCausa = idCausa
         super().__init__(parent)
         self.mapper = Mapper(
@@ -12,9 +18,9 @@ class ctrlPanelEscrito(PanelEscrito):
             MapObj(self.tcFotos, "directorioFotos"),
             MapObj(self.tcUbicacionFisica, "ubicacionFisica"),
             MapObj(self.dpIngreso, "fechaEntrada"),
-            MapObj(self.dpSalida, "fechaSalida")
+            MapObj(self.dpSalida, "fechaSalida"),
         )
-        #print(repr(self.mapper))
+        # print(repr(self.mapper))
 
     def to_model(self, model):
         self.mapper.to_model(model)

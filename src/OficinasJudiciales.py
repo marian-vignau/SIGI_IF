@@ -1,3 +1,9 @@
+"""
+To edit Oficinas Judiciales, add, modify and delete
+
+"""
+__author__ = "María Andrea Vignau"
+
 
 import wx
 from sqlalchemy.exc import IntegrityError
@@ -7,9 +13,8 @@ from vistas import OficinasJudiciales
 import models
 
 
-
-class ctrlOficinasJudiciales (OficinasJudiciales):
-    def __init__(self,  parent):
+class ctrlOficinasJudiciales(OficinasJudiciales):
+    def __init__(self, parent):
         super().__init__(parent)
         self.mapper = Mapper.Mapper(
             Mapper.MapObj(self.tcId, "id"),
@@ -18,7 +23,7 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
             Mapper.MapObj(self.tcACargo, "aCargo"),
             Mapper.MapList(self.chIdTipo, "idTipo", self.loadTipoDestinatarios()),
             Mapper.MapObj(self.tcCorreoElectronico, "correoElectronico"),
-            Mapper.MapObj(self.tcTelefono, "telefono")
+            Mapper.MapObj(self.tcTelefono, "telefono"),
         )
         self.init_lista_destinatarios()
         self.model = None
@@ -41,11 +46,13 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
         self.lsOficinas.ClearAll()
         self.list = ListViewObject.ListViewObject(
             self.lsOficinas,
-            [ListViewObject.Column("Circunscripcion", "circunscripcion"),
-            ListViewObject.Column("Nombre", "nombre"),
-            ListViewObject.Column("A cargo", "aCargo"),
-            ListViewObject.Column("Id", "id")],
-            itemkey="id"
+            [
+                ListViewObject.Column("Circunscripcion", "circunscripcion"),
+                ListViewObject.Column("Nombre", "nombre"),
+                ListViewObject.Column("A cargo", "aCargo"),
+                ListViewObject.Column("Id", "id"),
+            ],
+            itemkey="id",
         )
         s1 = models.sessions()
         for row in s1.query(models.TableDestinatario).all():
@@ -53,15 +60,18 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
 
     def loadTipoDestinatarios(self):
         s1 = models.sessions()
-        valores = [(row.descripcion, row.id) for
-                   row in s1.query(models.TableTipoDestinatario)]
+        valores = [
+            (row.descripcion, row.id) for row in s1.query(models.TableTipoDestinatario)
+        ]
         return valores
-
 
     def AddTipoOficinaOnLeftDClick(self, event):
         dlg = wx.TextEntryDialog(
-                self, 'Ingrese la descripción del nuevo tipo de destinatario',
-                'Editar Tipo Destinatario', '')
+            self,
+            "Ingrese la descripción del nuevo tipo de destinatario",
+            "Editar Tipo Destinatario",
+            "",
+        )
 
         dlg.SetValue("")
 
@@ -88,11 +98,14 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
     def lsOficinasOnListItemSelected(self, event):
         idOficina = self.list.get_key(event.Index)
         s1 = models.sessions()
-        self.model = s1.query(models.TableDestinatario).filter(models.TableDestinatario.id == idOficina).first()
+        self.model = (
+            s1.query(models.TableDestinatario)
+            .filter(models.TableDestinatario.id == idOficina)
+            .first()
+        )
         self.from_model(self.model)
         self.selected = self.model.id
         s1.expunge(self.model)
-
 
     def btReestablecerOnButtonClick(self, event):
         self.model = None
@@ -123,16 +136,14 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
 
         except IntegrityError as e:
             wx.MessageDialog(
-                self, "La oficina no puede ser agregada agregado\n" +\
-                      str(e)
+                self, "La oficina no puede ser agregada agregado\n" + str(e)
             ).ShowModal()
 
             s1.rollback()
 
-
     def btDeleteOnButtonClick(self, event):
         if not self.model:
-            wx.MessageDialog(self,"No hay oficina seleccionada").ShowModal()
+            wx.MessageDialog(self, "No hay oficina seleccionada").ShowModal()
         else:
             s1 = models.sessions()
             try:
@@ -147,9 +158,7 @@ class ctrlOficinasJudiciales (OficinasJudiciales):
 
             except IntegrityError as e:
                 wx.MessageDialog(
-                    self, "La oficina no puede ser borrada\n" +\
-                          str(e)
+                    self, "La oficina no puede ser borrada\n" + str(e)
                 ).ShowModal()
 
                 s1.rollback()
-

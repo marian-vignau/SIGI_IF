@@ -1,3 +1,10 @@
+"""
+To edit Objetos
+
+"""
+__author__ = "María Andrea Vignau"
+
+
 import wx
 from sqlalchemy.exc import IntegrityError
 
@@ -11,12 +18,15 @@ BORRAR_LABEL = "Borrar"
 
 
 class ctrlEdicionObjeto(EdicionObjeto):
-    def __init__(self, parent,
-                 idCausa=None,
-                 ObjetoRelacionado="",
-                 idObjetoRelacionado=None,
-                 idObjeto=None,
-                 delete=False):
+    def __init__(
+        self,
+        parent,
+        idCausa=None,
+        ObjetoRelacionado="",
+        idObjetoRelacionado=None,
+        idObjeto=None,
+        delete=False,
+    ):
         super().__init__(parent)
         self.error = False
         self.paObjetoNvo = PanelObjeto.ctrlPanelObjeto(self, ObjetoRelacionado)
@@ -26,12 +36,15 @@ class ctrlEdicionObjeto(EdicionObjeto):
         self.idObjeto = idObjeto
         self.idObjetoRelacionado = idObjetoRelacionado
         if idObjeto is None:
-            #self.enable_edicion_Objetos(False)
+            # self.enable_edicion_Objetos(False)
             self.model = models.TableObjeto()
         else:
             s1 = models.sessions()
-            self.model = s1.query(models.TableObjeto)\
-                .filter(models.TableObjeto.idObjeto == idObjeto).first()
+            self.model = (
+                s1.query(models.TableObjeto)
+                .filter(models.TableObjeto.idObjeto == idObjeto)
+                .first()
+            )
             self.paObjetoNvo.from_model(self.model)
             s1.expunge(self.model)
         if delete:
@@ -51,8 +64,7 @@ class ctrlEdicionObjeto(EdicionObjeto):
                 s1.delete(self.model)
                 s1.commit()
             except IntegrityError as error:
-                self.error = "El Objeto no puede ser borrado\n" + \
-                          str(error)
+                self.error = "El Objeto no puede ser borrado\n" + str(error)
 
         else:
             try:
@@ -67,11 +79,8 @@ class ctrlEdicionObjeto(EdicionObjeto):
                 s1.expunge(self.model)
 
             except IntegrityError as error:
-                self.error = "El Objeto no puede ser grabado\n" + \
-                          str(error)
+                self.error = "El Objeto no puede ser grabado\n" + str(error)
         if self.error:
-            wx.MessageDialog(
-                self, self.error
-            ).ShowModal()
+            wx.MessageDialog(self, self.error).ShowModal()
             s1.rollback()
         self.Close()

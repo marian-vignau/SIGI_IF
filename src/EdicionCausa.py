@@ -1,3 +1,10 @@
+"""
+To edit Causas
+
+"""
+__author__ = "María Andrea Vignau"
+
+
 import wx
 from sqlalchemy.exc import IntegrityError
 
@@ -8,8 +15,8 @@ import PanelCausa, EdicionEscrito, EdicionObjeto
 from wxSQAlch.Tools import replace_widget
 
 
-class ctrlEdicionCausa (EdicionCausa):
-    def __init__(self,  parent, idCausa=None):
+class ctrlEdicionCausa(EdicionCausa):
+    def __init__(self, parent, idCausa=None):
         super().__init__(parent)
         self.paCausaNvo = PanelCausa.ctrlPanelCausa(self)
         replace_widget(self, self.paCausa, self.paCausaNvo)
@@ -17,10 +24,12 @@ class ctrlEdicionCausa (EdicionCausa):
         self.idCausa = idCausa
         self.list = ListViewObject.ListViewObject(
             self.lsEscritos,
-            [ListViewObject.Column("Escrito", "idEscrito"),
-             ListViewObject.Column("Descripción", "descripcion"),
-             ListViewObject.Column("Ubicación", "ubicacionFisica")],
-            itemkey="idEscrito"
+            [
+                ListViewObject.Column("Escrito", "idEscrito"),
+                ListViewObject.Column("Descripción", "descripcion"),
+                ListViewObject.Column("Ubicación", "ubicacionFisica"),
+            ],
+            itemkey="idEscrito",
         )
         self.styles = self.list.styles
         self.error = False
@@ -31,13 +40,17 @@ class ctrlEdicionCausa (EdicionCausa):
             self.CreateTreeRoot()
         else:
             s1 = models.sessions()
-            self.model = s1.query(models.TableCausa) \
-                .filter(models.TableCausa.idCausa == idCausa).first()
+            self.model = (
+                s1.query(models.TableCausa)
+                .filter(models.TableCausa.idCausa == idCausa)
+                .first()
+            )
             self.paCausaNvo.from_model(self.model)
             s1.expunge(self.model)
             s1 = models.sessions()
-            for row in s1.query(models.TableEscrito). \
-                    filter(models.TableEscrito.idCausa==idCausa):
+            for row in s1.query(models.TableEscrito).filter(
+                models.TableEscrito.idCausa == idCausa
+            ):
                 self.list.change_item_list(row)
             self.LoadTree()
 
@@ -65,8 +78,7 @@ class ctrlEdicionCausa (EdicionCausa):
 
         if self.error:
             wx.MessageDialog(
-                self, "La causa no puede ser grabada\n" + \
-                      str(e)
+                self, "La causa no puede ser grabada\n" + str(e)
             ).ShowModal()
 
             s1.rollback()
@@ -77,10 +89,11 @@ class ctrlEdicionCausa (EdicionCausa):
         if dlg.resultado:
             self.list.change_item_list(dlg.model, add=True)
 
-
     def btDeleteEscritoOnButtonClick(self, event):
         idEscrito = self.list.get_key()
-        dlg = EdicionEscrito.ctrlEdicionEscrito(self, self.idCausa, idEscrito, delete=True)
+        dlg = EdicionEscrito.ctrlEdicionEscrito(
+            self, self.idCausa, idEscrito, delete=True
+        )
         dlg.ShowModal()
         if dlg.resultado:
             self.list.delete_item()
@@ -98,6 +111,7 @@ class ctrlEdicionCausa (EdicionCausa):
 
     def LoadTree(self):
         """Load all objetos in the tree."""
+
         def allocate_item(parent, row):
             """Add an item in the tree and return the item"""
             child = self.trcObjetos.AppendItem(parent, row.descripcion)
@@ -138,7 +152,9 @@ class ctrlEdicionCausa (EdicionCausa):
                     if parent:
                         allocated[row.idObjeto] = allocate_item(parent, row)
                         unallocated[row.idObjeto] = None
-                        add_allocated += 1  # if something has changed, iterate one more time
+                        add_allocated += (
+                            1
+                        )  # if something has changed, iterate one more time
 
         # if some objeto has a broken parent link, add it anyway
         for item, row in unallocated.items():
@@ -148,34 +164,41 @@ class ctrlEdicionCausa (EdicionCausa):
         self.trcObjetos.ExpandAll()
 
     def btAddObjetoOnButtonClick(self, event):
+        idEscrito = self.list.get_key()
+        if not idEscrito:
+            wx.MessageDialog(self, "Debe seleccionar un escrito").ShowModal()
+            return
+
         parent_item = self.trcObjetos.GetSelection()
         if parent_item:
             idObjetoRelacionado = self.trcObjetos.GetItemData(parent_item)
         else:
             parent_item = self.root
             idObjetoRelacionado = None
+
         descObjetoRelacionado = self.trcObjetos.GetItemText(parent_item)
-        dlg = EdicionObjeto.ctrlEdicionObjeto(self,
-                                              idCausa=self.model.idCausa,
-                                              ObjetoRelacionado=descObjetoRelacionado,
-                                              idObjetoRelacionado=idObjetoRelacionado)
+        dlg = EdicionObjeto.ctrlEdicionObjeto(
+            self,
+            idCausa=self.model.idCausa,
+            ObjetoRelacionado=descObjetoRelacionado,
+            idObjetoRelacionado=idObjetoRelacionado,
+        )
         dlg.ShowModal()
         if not dlg.error:
             child = self.trcObjetos.AppendItem(parent_item, dlg.model.descripcion)
             self.trcObjetos.SetItemData(child, dlg.model.idObjeto)
 
-
     def btDeleteObjetoOnButtonClick(self, event):
         item = self.trcObjetos.GetSelection()
         if self.trcObjetos.GetChildrenCount(item):
             wx.MessageDialog(
-                self, "Debe borrar los objetos relacionados antes").ShowModal()
+                self, "Debe borrar los objetos relacionados antes"
+            ).ShowModal()
         else:
             idObjeto = self.trcObjetos.GetItemData(item)
-            dlg = EdicionObjeto.ctrlEdicionObjeto(self,
-                                                  idCausa=self.model.idCausa,
-                                                  idObjeto=idObjeto,
-                                                  delete=True)
+            dlg = EdicionObjeto.ctrlEdicionObjeto(
+                self, idCausa=self.model.idCausa, idObjeto=idObjeto, delete=True
+            )
             dlg.ShowModal()
             if not dlg.error:
                 self.trcObjetos.Delete(item)
@@ -186,9 +209,9 @@ class ctrlEdicionCausa (EdicionCausa):
         if item:
             idObjeto = self.trcObjetos.GetItemData(item)
             if not idObjeto is None:
-                dlg = EdicionObjeto.ctrlEdicionObjeto(self,
-                                                      idCausa=self.model.idCausa,
-                                                      idObjeto=idObjeto)
+                dlg = EdicionObjeto.ctrlEdicionObjeto(
+                    self, idCausa=self.model.idCausa, idObjeto=idObjeto
+                )
                 dlg.ShowModal()
                 try:
                     if not dlg.error:
@@ -196,9 +219,6 @@ class ctrlEdicionCausa (EdicionCausa):
                 except Exception as e:
                     print(e)
                     print(dlg.model)
-
-
-
 
     def apply_style_on_tree(self, item, style):
         """Use style attr to update a tree item"""
@@ -261,8 +281,10 @@ class ctrlEdicionCausa (EdicionCausa):
             idObjeto = self.trcObjetos.GetItemData(item)
             objeto = self.trcObjetos.GetItemText(item)
             escrito = self.list.get_text()
-            result = wx.MessageBox("Desea vincular al objeto %s con el escrito %s" % (objeto, escrito),
-                                   "Confirma que desea vincular", wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+            result = wx.MessageBox(
+                "Desea vincular al objeto %s con el escrito %s" % (objeto, escrito),
+                "Confirma que desea vincular",
+                wx.OK | wx.CANCEL | wx.ICON_QUESTION,
+            )
             if result == wx.OK:
                 models.relac_escrito_objeto(self.idCausa, idEscrito, idObjeto)
-

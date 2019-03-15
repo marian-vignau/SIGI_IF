@@ -1,4 +1,3 @@
-
 import wx
 
 
@@ -15,17 +14,35 @@ class Column(object):
         return str(value)
 
     def __str__(self):
-        return '{:>15}={}'.format(
-            self.field, self.header)
+        return "{:>15}={}".format(self.field, self.header)
+
 
 class ListViewObject(object):
     """To provide a unified API and way on all wx.ListCtrl used in my project."""
-    styles = {"normal": {"font-weight": "normal", "font-color": wx.BLACK, "background": wx.WHITE},
-              "enhanced": {"font-weight": "bold", "font-color": wx.BLUE, "background": wx.WHITE},
-              "faded": {"font-weight": "normal", "font-color": wx.LIGHT_GREY, "background": wx.WHITE},
-              "blue": {"font-weight": "normal", "font-color": wx.WHITE, "background": wx.BLUE},
-              "red": {"font-weight": "normal", "font-color": wx.WHITE, "background": wx.RED}
-              }
+
+    styles = {
+        "normal": {
+            "font-weight": "normal",
+            "font-color": wx.BLACK,
+            "background": wx.WHITE,
+        },
+        "enhanced": {
+            "font-weight": "bold",
+            "font-color": wx.BLUE,
+            "background": wx.WHITE,
+        },
+        "faded": {
+            "font-weight": "normal",
+            "font-color": wx.LIGHT_GREY,
+            "background": wx.WHITE,
+        },
+        "blue": {
+            "font-weight": "normal",
+            "font-color": wx.WHITE,
+            "background": wx.BLUE,
+        },
+        "red": {"font-weight": "normal", "font-color": wx.WHITE, "background": wx.RED},
+    }
 
     def __init__(self, widget, columns, itemkey):
         self.widget = widget
@@ -66,15 +83,13 @@ class ListViewObject(object):
         for num, col in enumerate(self.columns):
             self.widget.InsertColumn(num, col.header)
 
-
     def change_item_list(self, model, add=False):
         index = self.item
         for num, col in enumerate(self.columns):
             text = col.to_str(getattr(model, col.field))
             if num == 0:
                 if add or index is None:
-                    index = self.widget.InsertItem(
-                        self.widget.GetItemCount(), text)
+                    index = self.widget.InsertItem(self.widget.GetItemCount(), text)
                 else:
                     self.widget.SetItemText(self.item, text)
             else:
@@ -116,8 +131,6 @@ class ListViewObject(object):
             self.widget.DeleteItem(self.item)
         self.item = None
 
-
-
     def clear_item(self):
         self.item = None
 
@@ -125,6 +138,3 @@ class ListViewObject(object):
         s = [">> itemkey = %r" % self.itemkey, ">> item = %r" % self.item]
         s.extend([str(x) for x in self.columns])
         return "\n".join(s)
-
-
-
