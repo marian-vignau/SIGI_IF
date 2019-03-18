@@ -11,21 +11,21 @@ from sqlalchemy.exc import IntegrityError
 from vistas import EdicionObjeto
 import models
 import PanelObjeto
+
 from wxSQAlch.Tools import replace_widget
 
 
 BORRAR_LABEL = "Borrar"
-
-
 class ctrlEdicionObjeto(EdicionObjeto):
     def __init__(
-        self,
-        parent,
-        idCausa=None,
-        ObjetoRelacionado="",
-        idObjetoRelacionado=None,
-        idObjeto=None,
-        delete=False,
+            self,
+            parent,
+            idCausa=None,
+            idEscrito=None,
+            ObjetoRelacionado="",
+            idObjetoRelacionado=None,
+            idObjeto=None,
+            delete=False,
     ):
         super().__init__(parent)
         self.error = False
@@ -34,6 +34,7 @@ class ctrlEdicionObjeto(EdicionObjeto):
         self.Layout()
         self.idCausa = idCausa
         self.idObjeto = idObjeto
+        self.idEscrito = idEscrito
         self.idObjetoRelacionado = idObjetoRelacionado
         if idObjeto is None:
             # self.enable_edicion_Objetos(False)
@@ -42,8 +43,8 @@ class ctrlEdicionObjeto(EdicionObjeto):
             s1 = models.sessions()
             self.model = (
                 s1.query(models.TableObjeto)
-                .filter(models.TableObjeto.idObjeto == idObjeto)
-                .first()
+                    .filter(models.TableObjeto.idObjeto == idObjeto)
+                    .first()
             )
             self.paObjetoNvo.from_model(self.model)
             s1.expunge(self.model)
@@ -71,7 +72,13 @@ class ctrlEdicionObjeto(EdicionObjeto):
                 if not self.idObjeto:
                     newid = models.next_objeto_id()
                     self.model.idObjeto = newid
+                relacion = models.TableRelEscObj(
+                    idCausa=self.idCausa,
+                    idEscrito=self.idEscrito,
+                    TableObjeto=self.model)
                 s1.add(self.model)
+                s1.add(relacion)
+
                 s1.commit()
                 wx.MessageDialog(
                     self, "El Objeto fue agregado" + repr(self.model)

@@ -180,6 +180,7 @@ class ctrlEdicionCausa(EdicionCausa):
         dlg = EdicionObjeto.ctrlEdicionObjeto(
             self,
             idCausa=self.model.idCausa,
+            idEscrito=idEscrito,
             ObjetoRelacionado=descObjetoRelacionado,
             idObjetoRelacionado=idObjetoRelacionado,
         )
