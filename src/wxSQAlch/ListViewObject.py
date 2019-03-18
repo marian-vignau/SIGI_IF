@@ -104,6 +104,9 @@ class ListViewObject(object):
             self.item = item
         else:
             self.item = self.widget.GetFirstSelected()
+
+        if self.item < 0:   # if nothing is selected
+            return None
         if isinstance(self.itemkey, int):
             return self.widget.GetItem(self.item, self.itemkey).GetText()
         else:
@@ -114,6 +117,8 @@ class ListViewObject(object):
             self.item = item
         else:
             self.item = self.widget.GetFirstSelected()
+        if self.item < 0:  # if nothing is selected
+            return None
         return self.widget.GetItemText(self.item)
 
     def show_selection(self, item=None):

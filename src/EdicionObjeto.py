@@ -81,8 +81,10 @@ class ctrlEdicionObjeto(EdicionObjeto):
 
                 s1.commit()
                 wx.MessageDialog(
-                    self, "El Objeto fue agregado" + repr(self.model)
+                    self, "El Objeto fue agregado"   #  + repr(self.model)
                 ).ShowModal()
+                self.idObjeto = self.model.idObjeto
+                self.Descripcion = self.model.descripcion
                 s1.expunge(self.model)
 
             except IntegrityError as error:

@@ -167,16 +167,25 @@ class ctrlEdicionCausa(EdicionCausa):
         idEscrito = self.list.get_key()
         if not idEscrito:
             wx.MessageDialog(self, "Debe seleccionar un escrito").ShowModal()
+            #event.skip()
             return
 
         parent_item = self.trcObjetos.GetSelection()
-        if parent_item:
-            idObjetoRelacionado = self.trcObjetos.GetItemData(parent_item)
+        pt = self.trcObjetos.Position
+
+        parent_item, flags = self.trcObjetos.HitTest(pt)
+        print(parent_item)
+        if parent_item.IsOK():
+            idObjetoRelacionado = self.trcObjetos.GetItemData(parent_item.GetID())
         else:
             parent_item = self.root
             idObjetoRelacionado = None
 
         descObjetoRelacionado = self.trcObjetos.GetItemText(parent_item)
+        print("<<<<<<<<<< agregar objeto >>>>>>>>>>>>>>>>")
+        print(parent_item.GetID(), type(parent_item))
+        print(idObjetoRelacionado)
+        print(descObjetoRelacionado)
         dlg = EdicionObjeto.ctrlEdicionObjeto(
             self,
             idCausa=self.model.idCausa,
@@ -186,8 +195,8 @@ class ctrlEdicionCausa(EdicionCausa):
         )
         dlg.ShowModal()
         if not dlg.error:
-            child = self.trcObjetos.AppendItem(parent_item, dlg.model.descripcion)
-            self.trcObjetos.SetItemData(child, dlg.model.idObjeto)
+            child = self.trcObjetos.AppendItem(parent_item, dlg.Descripcion)
+            self.trcObjetos.SetItemData(child, dlg.idObjeto)
 
     def btDeleteObjetoOnButtonClick(self, event):
         item = self.trcObjetos.GetSelection()
@@ -259,6 +268,7 @@ class ctrlEdicionCausa(EdicionCausa):
 
     def trcObjetosOnLeftDown(self, event):
         pt = event.GetPosition()
+        print(type(pt), dir(pt))
         self.trcObjetos.ExpandAll()
         item, flags = self.trcObjetos.HitTest(pt)
         if not item:
