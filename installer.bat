@@ -1,12 +1,19 @@
 @echo off
 echo To create installer
+if exist "installer" (
+    rmdir /s/q "installer"
+)
 
 call venv\Scripts\activate.bat
-pyinstaller src\run.py
-if exist "dist\run\run.exe" (
+md installer
+cd src
+pyinstaller  --distpath ..\installer\dist --workpath ..\installer\build -w run.py
+cd ..
+if exist "installer\dist\run\run.exe" (
     echo Remove build subdir
-    rmdir /s/q "build"
-    cd dist\run
+    rmdir /s/q "installer\build"
+    call venv\Scripts\deactivate.bat
+    cd installer\dist\run
     run.exe
 )
 

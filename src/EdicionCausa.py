@@ -33,6 +33,7 @@ class ctrlEdicionCausa(EdicionCausa):
         )
         self.styles = self.list.styles
         self.error = False
+        self.last_selected_item = None
 
         if idCausa is None:
             self.enable_edicion_lista(False)
@@ -166,24 +167,20 @@ class ctrlEdicionCausa(EdicionCausa):
     def btAddObjetoOnButtonClick(self, event):
         idEscrito = self.list.get_key()
         if not idEscrito:
-            wx.MessageDialog(self, "Debe seleccionar un escrito").ShowModal()
-            #event.skip()
-            return
+            idEscrito = self.list.get_key(0)
+            if not idEscrito:
+                wx.MessageDialog(self, "Debe seleccionar un escrito").ShowModal()
+                return
 
-        parent_item = self.trcObjetos.GetSelection()
-        pt = self.trcObjetos.Position
-
-        parent_item, flags = self.trcObjetos.HitTest(pt)
-        print(parent_item)
-        if parent_item.IsOK():
-            idObjetoRelacionado = self.trcObjetos.GetItemData(parent_item.GetID())
+        if self.last_selected_item:
+            idObjetoRelacionado = self.trcObjetos.GetItemData(self.last_selected_item)
         else:
-            parent_item = self.root
+            self.last_selected_item = self.root
             idObjetoRelacionado = None
 
-        descObjetoRelacionado = self.trcObjetos.GetItemText(parent_item)
+        descObjetoRelacionado = self.trcObjetos.GetItemText(self.last_selected_item)
         print("<<<<<<<<<< agregar objeto >>>>>>>>>>>>>>>>")
-        print(parent_item.GetID(), type(parent_item))
+        #print(parent_item.GetID(), type(parent_item))
         print(idObjetoRelacionado)
         print(descObjetoRelacionado)
         dlg = EdicionObjeto.ctrlEdicionObjeto(
@@ -195,7 +192,7 @@ class ctrlEdicionCausa(EdicionCausa):
         )
         dlg.ShowModal()
         if not dlg.error:
-            child = self.trcObjetos.AppendItem(parent_item, dlg.Descripcion)
+            child = self.trcObjetos.AppendItem(self.last_selected_item, dlg.Descripcion)
             self.trcObjetos.SetItemData(child, dlg.idObjeto)
 
     def btDeleteObjetoOnButtonClick(self, event):
@@ -217,6 +214,7 @@ class ctrlEdicionCausa(EdicionCausa):
         pt = event.GetPosition()
         item, flags = self.trcObjetos.HitTest(pt)
         if item:
+            self.last_selected_item = item
             idObjeto = self.trcObjetos.GetItemData(item)
             if not idObjeto is None:
                 dlg = EdicionObjeto.ctrlEdicionObjeto(
@@ -268,11 +266,11 @@ class ctrlEdicionCausa(EdicionCausa):
 
     def trcObjetosOnLeftDown(self, event):
         pt = event.GetPosition()
-        print(type(pt), dir(pt))
         self.trcObjetos.ExpandAll()
         item, flags = self.trcObjetos.HitTest(pt)
         if not item:
             return
+        self.last_selected_item = item
         idObjeto = self.trcObjetos.GetItemData(item)
         for child in self.walk_through(self.root):
             self.apply_style_on_tree(child, "normal")

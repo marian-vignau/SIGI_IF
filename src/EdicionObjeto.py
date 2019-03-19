@@ -69,9 +69,10 @@ class ctrlEdicionObjeto(EdicionObjeto):
 
         else:
             try:
-                if not self.idObjeto:
-                    newid = models.next_objeto_id()
-                    self.model.idObjeto = newid
+                #if not self.idObjeto:
+                #    newid = models.next_objeto_id()
+                #    self.model.idObjeto = newid
+                self.model.objetoRelacionado = self.idObjetoRelacionado
                 relacion = models.TableRelEscObj(
                     idCausa=self.idCausa,
                     idEscrito=self.idEscrito,
