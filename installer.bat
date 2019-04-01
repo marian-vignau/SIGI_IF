@@ -13,7 +13,5 @@ if exist "installer\dist\run\run.exe" (
     echo Remove build subdir
     rmdir /s/q "installer\build"
     call venv\Scripts\deactivate.bat
-    cd installer\dist\run
-    run.exe
 )
 

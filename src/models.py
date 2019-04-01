@@ -5,6 +5,7 @@ Model database
 __author__ = "María Andrea Vignau"
 
 # coding: utf-8
+from pathlib import Path
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -19,7 +20,7 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import func
 
-FILEPATH = "db1.db"
+FILEPATH = "database.db"
 SQLALCHEMY_ECHO = False
 Base = declarative_base()
 metadata = Base.metadata
@@ -371,13 +372,36 @@ def init_engine():
     global engine
     global sessions
     global Base
-    print(FILEPATH)
+    print(str(datapath))
     print(SQLALCHEMY_ECHO)
 
-    engine = create_engine("sqlite:///" + FILEPATH, echo=SQLALCHEMY_ECHO)
+    engine = create_engine("sqlite:///" + str(datapath), echo=SQLALCHEMY_ECHO)
     sessions = sessionmaker()
     sessions.configure(bind=engine)
     Base.metadata.create_all(engine)
 
 
+def make_backup(filename):
+    import getpass
+    import datetime
+    import shutil
+    current_user = getpass.getuser()
+    backupdate = datetime.datetime.now()
+    backupname = current_user + "-" + backupdate.isoformat(timespec="seconds") + ".db"
+    backupname = backupname.replace(":", "_")
+    if Path.is_file(Path(filename)):
+        backupdir = Path("backup")
+        if not Path.is_dir(backupdir):
+            backupdir.mkdir()
+        shutil.copy(str(datapath), str(backupdir.joinpath(backupname)))
+        # Path.replace(datapath, )
+        if Path.is_file(backupdir.joinpath(backupname)):
+            print("backup done")
+
+
+datapath = Path("data").joinpath(FILEPATH)
+if not Path.is_dir(Path("data")):
+    Path("data").mkdir()
+if datapath.is_file():
+    make_backup(datapath)
 init_engine()

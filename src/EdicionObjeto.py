@@ -38,6 +38,16 @@ class ctrlEdicionObjeto(EdicionObjeto):
         self.idObjetoRelacionado = idObjetoRelacionado
         if idObjeto is None:
             # self.enable_edicion_Objetos(False)
+            if idObjetoRelacionado:
+                s1 = models.sessions()
+                parentobject = (
+                    s1.query(models.TableObjeto)
+                        .filter(models.TableObjeto.idObjeto == idObjetoRelacionado)
+                        .first()
+                )
+                if parentobject:
+                    self.paObjetoNvo.from_model(parentobject)
+                    self.paObjetoNvo.tcDescripcion.Clear()
             self.model = models.TableObjeto()
         else:
             s1 = models.sessions()
@@ -48,6 +58,7 @@ class ctrlEdicionObjeto(EdicionObjeto):
             )
             self.paObjetoNvo.from_model(self.model)
             s1.expunge(self.model)
+
         if delete:
             self.paObjetoNvo.mapper.enable(False)
             self.btGuardar.SetLabel(BORRAR_LABEL)
@@ -69,21 +80,19 @@ class ctrlEdicionObjeto(EdicionObjeto):
 
         else:
             try:
-                #if not self.idObjeto:
-                #    newid = models.next_objeto_id()
-                #    self.model.idObjeto = newid
-                self.model.objetoRelacionado = self.idObjetoRelacionado
-                relacion = models.TableRelEscObj(
-                    idCausa=self.idCausa,
-                    idEscrito=self.idEscrito,
-                    TableObjeto=self.model)
                 s1.add(self.model)
-                s1.add(relacion)
+                self.model.objetoRelacionado = self.idObjetoRelacionado
+                if not self.idObjeto:
+                    relacion = models.TableRelEscObj(
+                        idCausa=self.idCausa,
+                        idEscrito=self.idEscrito,
+                        TableObjeto=self.model)
+                    s1.add(relacion)
 
                 s1.commit()
-                wx.MessageDialog(
-                    self, "El Objeto fue agregado"   #  + repr(self.model)
-                ).ShowModal()
+                # wx.MessageDialog(
+                #    self, "El Objeto fue agregado"   #  + repr(self.model)
+                # ).ShowModal()
                 self.idObjeto = self.model.idObjeto
                 self.Descripcion = self.model.descripcion
                 s1.expunge(self.model)
