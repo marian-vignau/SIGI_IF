@@ -9,6 +9,8 @@ class Column(object):
         self.header = header
         self.field = field
         self.__dict__.update(kargs)
+        if not hasattr(self, "size"):
+            self.size = 1
 
     def to_str(self, value):
         return str(value)
@@ -80,8 +82,20 @@ class ListViewObject(object):
         self.widget.SetItemBackgroundColour(self.item, use["background"])
 
     def _format_cols(self):
+        """
+        To use the size attribute, it is a fraction of total client width.
+        """
+        sum_of_units = 0
+        for col in self.columns:
+            sum_of_units += col.size
+
+        total_width, _ = self.widget.GetClientSize()
+        measure_unit = total_width / sum_of_units
+
         for num, col in enumerate(self.columns):
             self.widget.InsertColumn(num, col.header)
+            self.widget.SetColumnWidth(num, col.size * measure_unit)
+
 
     def change_item_list(self, model, add=False):
         index = self.item

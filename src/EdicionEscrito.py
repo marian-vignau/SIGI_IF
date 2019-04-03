@@ -9,6 +9,7 @@ import wx
 from sqlalchemy.exc import IntegrityError
 
 from vistas import EdicionEscrito
+from wxSQAlch import Tools
 import models
 import PanelEscrito, EdicionObjeto
 from wxSQAlch.Tools import replace_widget
@@ -40,6 +41,8 @@ class ctrlEdicionEscrito(EdicionEscrito):
         if delete:
             self.paEscritoNvo.mapper.enable(False)
             self.btGuardar.SetLabel(BORRAR_LABEL)
+        Tools.changeFont(self, 2)
+        Tools.changeFont(self.paEscritoNvo, 2)
 
     def btReestablecerOnButtonClick(self, event):
         self.paEscritoNvo.from_model(self.model)

@@ -9,6 +9,7 @@ import wx
 from sqlalchemy.exc import IntegrityError
 
 from wxSQAlch import Mapper, ListViewObject
+from wxSQAlch import Tools
 from vistas import OficinasJudiciales
 import models
 
@@ -16,6 +17,8 @@ import models
 class ctrlOficinasJudiciales(OficinasJudiciales):
     def __init__(self, parent):
         super().__init__(parent)
+        self.Maximize()
+        self.Layout()
         self.mapper = Mapper.Mapper(
             Mapper.MapObj(self.tcId, "id"),
             Mapper.MapObj(self.tcNombre, "nombre"),
@@ -28,6 +31,7 @@ class ctrlOficinasJudiciales(OficinasJudiciales):
         self.init_lista_destinatarios()
         self.model = None
         self.selected = None
+        Tools.changeFont(self, 2)
 
     def clear(self):
         self.mapper.clear()
@@ -48,8 +52,8 @@ class ctrlOficinasJudiciales(OficinasJudiciales):
             self.lsOficinas,
             [
                 ListViewObject.Column("Circunscripcion", "circunscripcion"),
-                ListViewObject.Column("Nombre", "nombre"),
-                ListViewObject.Column("A cargo", "aCargo"),
+                ListViewObject.Column("Nombre", "nombre", size=2),
+                ListViewObject.Column("A cargo", "aCargo", size=2),
                 ListViewObject.Column("Id", "id"),
             ],
             itemkey="id",

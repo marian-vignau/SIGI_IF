@@ -13,6 +13,8 @@ import models
 import PanelObjeto
 
 from wxSQAlch.Tools import replace_widget
+from wxSQAlch import Tools
+
 
 
 BORRAR_LABEL = "Borrar"
@@ -62,6 +64,9 @@ class ctrlEdicionObjeto(EdicionObjeto):
         if delete:
             self.paObjetoNvo.mapper.enable(False)
             self.btGuardar.SetLabel(BORRAR_LABEL)
+        Tools.changeFont(self, 2)
+        Tools.changeFont(self.paEscritoNvo, 2)
+
 
     def btReestablecerOnButtonClick(self, event):
         self.paObjetoNvo.from_model(self.model)

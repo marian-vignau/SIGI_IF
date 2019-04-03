@@ -6,4 +6,5 @@
 !/tests
 !/formbuiderProject
 !*.bat
+!*.md
 !*.txt

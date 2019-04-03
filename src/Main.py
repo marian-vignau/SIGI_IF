@@ -5,6 +5,7 @@ __author__ = "María Andrea Vignau"
 
 
 from wxSQAlch import ListViewObject
+from wxSQAlch import Tools
 from vistas import Main
 import models
 import EdicionCausa
@@ -13,6 +14,7 @@ import EdicionCausa
 class ctrlMain(Main):
     def __init__(self, parent):
         super().__init__(parent)
+        Tools.changeFont(self, 2)
         self.init_lista_causas()
 
     def init_lista_causas(self):
@@ -21,7 +23,7 @@ class ctrlMain(Main):
             self.lsPrincipal,
             [
                 ListViewObject.Column("Exp Judicial", "expteJud"),
-                ListViewObject.Column("Carátula", "caratula"),
+                ListViewObject.Column("Carátula", "caratula", size=3),
                 ListViewObject.Column("Exp Policial", "exptePol"),
                 ListViewObject.Column("Id", "idCausa"),
             ],

@@ -9,6 +9,7 @@ import wx
 from sqlalchemy.exc import IntegrityError
 
 from wxSQAlch import ListViewObject
+from wxSQAlch import Tools
 from vistas import EdicionCausa
 import models
 import PanelCausa, EdicionEscrito, EdicionObjeto
@@ -18,6 +19,7 @@ from wxSQAlch.Tools import replace_widget
 class ctrlEdicionCausa(EdicionCausa):
     def __init__(self, parent, idCausa=None):
         super().__init__(parent)
+        self.Maximize()
         self.paCausaNvo = PanelCausa.ctrlPanelCausa(self)
         replace_widget(self, self.paCausa, self.paCausaNvo)
         self.Layout()
@@ -26,7 +28,7 @@ class ctrlEdicionCausa(EdicionCausa):
             self.lsEscritos,
             [
                 ListViewObject.Column("Escrito", "idEscrito"),
-                ListViewObject.Column("Descripción", "descripcion"),
+                ListViewObject.Column("Descripción", "descripcion", size=2),
                 ListViewObject.Column("Ubicación", "ubicacionFisica"),
             ],
             itemkey="idEscrito",
@@ -54,6 +56,8 @@ class ctrlEdicionCausa(EdicionCausa):
             ):
                 self.list.change_item_list(row)
             self.LoadTree()
+        Tools.changeFont(self, 2)
+        Tools.changeFont(self.paCausaNvo, 2)
 
     def enable_edicion_lista(self, enabled):
         self.btAddEscrito.Enable(enabled)
