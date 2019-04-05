@@ -390,7 +390,7 @@ def make_backup(filename):
     backupname = current_user + "-" + backupdate.isoformat(timespec="seconds") + ".db"
     backupname = backupname.replace(":", "_")
     if Path.is_file(Path(filename)):
-        backupdir = Path("backup")
+        backupdir = Path.cwd().joinpath("..").joinpath("backup")
         if not Path.is_dir(backupdir):
             backupdir.mkdir()
         shutil.copy(str(datapath), str(backupdir.joinpath(backupname)))
@@ -399,9 +399,10 @@ def make_backup(filename):
             print("backup done")
 
 
-datapath = Path("data").joinpath(FILEPATH)
-if not Path.is_dir(Path("data")):
+datadir = Path.cwd().joinpath("..").joinpath("data")
+if not Path.is_dir(datadir):
     Path("data").mkdir()
+datapath = Path("data").joinpath(FILEPATH)
 if datapath.is_file():
     make_backup(datapath)
 init_engine()

@@ -4,13 +4,12 @@ import wx
 class Column(object):
     header = "header"
     field = "field"
+    size = 1
 
     def __init__(self, header, field, **kargs):
         self.header = header
         self.field = field
         self.__dict__.update(kargs)
-        if not hasattr(self, "size"):
-            self.size = 1
 
     def to_str(self, value):
         return str(value)
@@ -139,14 +138,14 @@ class ListViewObject(object):
         """Select an item, if arg item is None"""
         if not item is None:
             self.item = item
-        elif not self.item is None:
+        if not self.item is None:
             self.widget.Select(self.item, on=True)
 
     def delete_item(self, item=None):
         """Delete an item, if arg item is None, delete current item"""
         if not item is None:
             self.item = item
-        elif not self.item is None:
+        if not self.item is None:
             self.widget.DeleteItem(self.item)
         self.item = None
 
