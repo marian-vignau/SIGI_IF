@@ -56,14 +56,13 @@ class App(wx.App):
         wx.App.__init__(self)
 
     def __del__(self):
-        print("termino applicacion ahora")
+        pass
 
 
 if __name__ == "__main__":
     app = App()
     usuario = Login()
     if usuario.name:
-        print("acepto usuario")
         window = Main.ctrlMain(None)
 
         window.Show()

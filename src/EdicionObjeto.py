@@ -65,7 +65,7 @@ class ctrlEdicionObjeto(EdicionObjeto):
             self.paObjetoNvo.mapper.enable(False)
             self.btGuardar.SetLabel(BORRAR_LABEL)
         Tools.changeFont(self, 2)
-        Tools.changeFont(self.paEscritoNvo, 2)
+        Tools.changeFont(self.paObjetoNvo, 2)
 
 
     def btReestablecerOnButtonClick(self, event):

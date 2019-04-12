@@ -6,6 +6,7 @@
 !/tests
 !/alembic
 !/formbuiderProject
+!/img
 !*.bat
 !*.md
 !*.txt

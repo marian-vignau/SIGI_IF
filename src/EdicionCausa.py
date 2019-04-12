@@ -76,6 +76,7 @@ class ctrlEdicionCausa(EdicionCausa):
         try:
             s1.add(self.model)
             s1.commit()
+            self.idCausa = self.model.idCausa
             self.enable_edicion_lista(True)
 
         except IntegrityError as e:
@@ -183,10 +184,6 @@ class ctrlEdicionCausa(EdicionCausa):
             idObjetoRelacionado = None
 
         descObjetoRelacionado = self.trcObjetos.GetItemText(self.last_selected_item)
-        print("<<<<<<<<<< agregar objeto >>>>>>>>>>>>>>>>")
-        #print(parent_item.GetID(), type(parent_item))
-        print(idObjetoRelacionado)
-        print(descObjetoRelacionado)
         dlg = EdicionObjeto.ctrlEdicionObjeto(
             self,
             idCausa=self.model.idCausa,

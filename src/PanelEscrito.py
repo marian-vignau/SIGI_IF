@@ -15,6 +15,7 @@ class ctrlPanelEscrito(PanelEscrito):
         self.mapper = Mapper(
             MapObj(self.tcIdEscrito, "idEscrito"),
             MapObj(self.tcDescripcion, "descripcion"),
+            MapObj(self.tcObservaciones, "observaciones"),
             MapObj(self.tcFotos, "directorioFotos"),
             MapObj(self.tcUbicacionFisica, "ubicacionFisica"),
             MapObj(self.dpIngreso, "fechaEntrada"),
@@ -29,7 +30,7 @@ class ctrlPanelEscrito(PanelEscrito):
 
     def from_model(self, model):
         self.mapper.from_model(model)
-        self.idCausa = model.idCausa
+        # self.idCausa = model.idCausa
         return model
 
     def clear(self):

@@ -45,4 +45,4 @@ class ctrlMain(Main):
     def mnuCausaAgregarOnMenuSelection(self, event):
         dlg = EdicionCausa.ctrlEdicionCausa(self)
         dlg.ShowModal()
-        self.list.change_item_list(dlg.model)
+        self.list.change_item_list(dlg.model, add=True)

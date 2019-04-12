@@ -38,7 +38,7 @@ class ctrlPanelCausa(PanelCausa):
 
     def loadDestinatarios(self):
         s1 = models.sessions()
-        valores = [(row.nombre, row.id) for row in s1.query(models.TableDestinatario)]
+        valores = [(row.id, row.id) for row in s1.query(models.TableDestinatario)]
         return valores
 
     def to_model(self, model):

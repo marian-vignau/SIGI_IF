@@ -7,7 +7,7 @@ if exist "installer" (
 call venv\Scripts\activate.bat
 md installer
 cd src
-pyinstaller  --distpath ..\installer\dist --workpath ..\installer\build -w run.py
+pyinstaller --icon=..\img\icon.ico --distpath ..\installer\dist --workpath ..\installer\build -w run.py
 cd ..
 if exist "installer\dist\run\run.exe" (
     echo Remove build subdir

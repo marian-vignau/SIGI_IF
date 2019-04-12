@@ -268,10 +268,12 @@ class TableEscrito(Base, GenericTable):
     idCausa = Column(ForeignKey("TableCausa.idCausa"), primary_key=True, nullable=False)
     idEscrito = Column(Text, primary_key=True, nullable=False)
     descripcion = Column(Text)
+    observaciones = Column(Text)
     ubicacionFisica = Column(Text)
     directorioFotos = Column(Text)
     fechaEntrada = Column(DateTime)
     fechaSalida = Column(DateTime)
+
 
     TableCausa = relationship("TableCausa")
 
@@ -372,16 +374,13 @@ def init_engine():
     global engine
     global sessions
     global Base
-    print(str(datapath))
-    print(SQLALCHEMY_ECHO)
-
     engine = create_engine("sqlite:///" + str(datapath), echo=SQLALCHEMY_ECHO)
     sessions = sessionmaker()
     sessions.configure(bind=engine)
     Base.metadata.create_all(engine)
 
 
-def make_backup(filename):
+def make_backup(basedir, filename):
     import getpass
     import datetime
     import shutil
@@ -390,19 +389,20 @@ def make_backup(filename):
     backupname = current_user + "-" + backupdate.isoformat(timespec="seconds") + ".db"
     backupname = backupname.replace(":", "_")
     if Path.is_file(Path(filename)):
-        backupdir = Path.cwd().joinpath("..").joinpath("backup")
+        backupdir = basedir.joinpath("backup")
         if not Path.is_dir(backupdir):
             backupdir.mkdir()
         shutil.copy(str(datapath), str(backupdir.joinpath(backupname)))
         # Path.replace(datapath, )
-        if Path.is_file(backupdir.joinpath(backupname)):
-            print("backup done")
+        if not Path.is_file(backupdir.joinpath(backupname)):
+            raise (FileNotFoundError, "Backup failed " + str(backupdir.joinpath(backupname)))
 
 
-datadir = Path.cwd().joinpath("..").joinpath("data")
-if not Path.is_dir(datadir):
-    Path("data").mkdir()
-datapath = Path("data").joinpath(FILEPATH)
+basedir = Path.cwd()
+while not basedir.joinpath("data").is_dir():
+    basedir = basedir.joinpath("..")
+datadir = basedir.joinpath("data")
+datapath = datadir.joinpath(FILEPATH)
 if datapath.is_file():
-    make_backup(datapath)
+    make_backup(basedir, datapath)
 init_engine()
