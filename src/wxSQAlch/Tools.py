@@ -10,8 +10,14 @@ def replace_widget(frame, old_widget, new_widget):
 
 
 def changeFont(object, diff):
+    if hasattr(object, "GetFont"):
+        f = object.GetFont()
+        f.SetPointSize(f.GetPointSize() + diff)
+        object.SetFont(f)
+        setattr(object, "_font_normal", f)
     for x in object.GetChildren():
-        if hasattr(x, "GetFont"):
-            f = x.GetFont()
-            f.SetPointSize(f.GetPointSize() + diff)
-            x.SetFont(f)
+        changeFont(x, diff)
+        # if hasattr(x, "GetFont"):
+        #     f = x.GetFont()
+        #     f.SetPointSize(f.GetPointSize() + diff)
+        #     x.SetFont(f)

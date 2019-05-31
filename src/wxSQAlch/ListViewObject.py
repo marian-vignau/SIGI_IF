@@ -57,7 +57,8 @@ class ListViewObject(object):
         self.item = None
         self._format_cols()
 
-        self.font_normal = self.widget.GetFont()
+    def _init_fonts(self):
+        self.font_normal = getattr(self, "_font_normal", self.widget.GetFont())
         self.font_bold = self.font_normal.Bold()
 
     def apply_style_all(self, style="", reset=False):
@@ -65,6 +66,8 @@ class ListViewObject(object):
             self.apply_style(idx, style, reset)
 
     def apply_style(self, item=None, style="", reset=False):
+        if not hasattr(self, "font_normal"):
+            self._init_fonts()
         if item is None:
             self.item = self.widget.GetFirstSelected()
         else:

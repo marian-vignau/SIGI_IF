@@ -14,8 +14,13 @@
 #
 # For further info,
 
+import sys
 import os
+
+sys.path.append(os.path.join(__file__, '../../src'))
+
 from unittest import TestCase, mock
+
 import models
 
 class TestModels(TestCase):

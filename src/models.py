@@ -333,6 +333,16 @@ def objects_rel_causa(idCausa):
     return q1
 
 
+def objects_rel_causa(idCausa):
+    s1 = sessions()
+    q1 = (
+        s1.query(TableObjeto)
+            .join(TableRelEscObj, TableObjeto.idObjeto == TableRelEscObj.idObjeto)
+            .filter(TableRelEscObj.idCausa == idCausa)
+    )
+    return q1
+
+
 def objects_rel_escrito(idCausa, idEscrito):
     s1 = sessions()
     q1 = (
@@ -353,6 +363,19 @@ def escritos_rel_objeto(idCausa, idObjeto):
     )
     list = [row.idEscrito for row in q1]
     return list
+
+
+def get_escrito(idCausa, idEscrito):
+    s1 = sessions()
+    q1 = (
+        s1.query(TableEscrito)
+            .filter(TableEscrito.idCausa == idCausa)
+            .filter(TableEscrito.idEscrito == idEscrito)
+    )
+    if q1:
+        return q1[0]
+    else:
+        return None
 
 
 def relac_escrito_objeto(idCausa, idEscrito, idObjeto):

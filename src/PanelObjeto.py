@@ -12,6 +12,7 @@ import models
 class ctrlPanelObjeto(PanelObjeto):
     def __init__(self, parent, ObjetoRelacionado=""):
         super().__init__(parent)
+
         self.mapper = Mapper(
             MapObj(self.tcDescripcion, "descripcion"),
             MapObj(self.tcUbicacionFisica, "ubicacionFisica"),

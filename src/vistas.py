@@ -19,7 +19,7 @@ class VistaCausa(wx.Frame):
 
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"Causa", pos=wx.DefaultPosition, size=wx.Size(718, 463),
-                          style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+                          style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER | wx.TAB_TRAVERSAL)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
@@ -201,7 +201,7 @@ class OficinasJudiciales(wx.Dialog):
 
     def __init__(self, parent):
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
-                           size=wx.Size(777, 471), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+                           size=wx.Size(777, 471), style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
@@ -382,7 +382,7 @@ class PanelEscrito(wx.Panel):
         self.m_staticText18 = wx.StaticText(self, wx.ID_ANY, u"Identificador", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText18.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText18, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText18, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
         self.tcIdEscrito = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
         fgSizer2.Add(self.tcIdEscrito, 0, wx.ALL | wx.EXPAND, 5)
@@ -390,7 +390,7 @@ class PanelEscrito(wx.Panel):
         self.m_staticText19 = wx.StaticText(self, wx.ID_ANY, u"Descripción", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText19.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText19, 0, wx.ALL, 5)
+        fgSizer2.Add(self.m_staticText19, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
 
         self.tcDescripcion = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
                                          wx.TE_MULTILINE)
@@ -399,16 +399,17 @@ class PanelEscrito(wx.Panel):
         self.Observaciones = wx.StaticText(self, wx.ID_ANY, u"Observaciones", wx.DefaultPosition, wx.DefaultSize, 0)
         self.Observaciones.Wrap(-1)
 
-        fgSizer2.Add(self.Observaciones, 0, wx.ALL, 5)
+        fgSizer2.Add(self.Observaciones, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
 
         self.tcObservaciones = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
                                            wx.TE_MULTILINE)
         fgSizer2.Add(self.tcObservaciones, 1, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText20 = wx.StaticText(self, wx.ID_ANY, u"Ubicación Fisica", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText20 = wx.StaticText(self, wx.ID_ANY, u"Ubicación\nFisica", wx.DefaultPosition, wx.DefaultSize,
+                                            wx.ALIGN_RIGHT)
         self.m_staticText20.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText20, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText20, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
         self.tcUbicacionFisica = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
         fgSizer2.Add(self.tcUbicacionFisica, 0, wx.ALL | wx.EXPAND, 5)
@@ -416,7 +417,7 @@ class PanelEscrito(wx.Panel):
         self.m_staticText21 = wx.StaticText(self, wx.ID_ANY, u"Fotos", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText21.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText21, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText21, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
         self.tcFotos = wx.DirPickerCtrl(self, wx.ID_ANY, wx.EmptyString, u"Elija un directorio", wx.DefaultPosition,
                                         wx.DefaultSize, wx.DIRP_DEFAULT_STYLE | wx.DIRP_SMALL)
@@ -425,20 +426,26 @@ class PanelEscrito(wx.Panel):
         self.m_staticText22 = wx.StaticText(self, wx.ID_ANY, u"Ingreso", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText22.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText22, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText22, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
+
+        bSizer27 = wx.BoxSizer(wx.HORIZONTAL)
 
         self.dpIngreso = wx.adv.DatePickerCtrl(self, wx.ID_ANY, wx.DefaultDateTime, wx.DefaultPosition, wx.DefaultSize,
                                                wx.adv.DP_DEFAULT | wx.adv.DP_DROPDOWN)
-        fgSizer2.Add(self.dpIngreso, 0, wx.ALL | wx.EXPAND, 5)
+        bSizer27.Add(self.dpIngreso, 0, wx.ALL | wx.EXPAND, 5)
+
+        bSizer27.Add((0, 0), 1, wx.EXPAND, 5)
 
         self.m_staticText23 = wx.StaticText(self, wx.ID_ANY, u"Salida", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText23.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText23, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        bSizer27.Add(self.m_staticText23, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
         self.dpSalida = wx.adv.DatePickerCtrl(self, wx.ID_ANY, wx.DefaultDateTime, wx.DefaultPosition, wx.DefaultSize,
                                               wx.adv.DP_ALLOWNONE | wx.adv.DP_DEFAULT | wx.adv.DP_DROPDOWN)
-        fgSizer2.Add(self.dpSalida, 0, wx.ALL | wx.EXPAND, 5)
+        bSizer27.Add(self.dpSalida, 0, wx.ALL | wx.EXPAND, 5)
+
+        fgSizer2.Add(bSizer27, 1, wx.EXPAND, 5)
 
         self.SetSizer(fgSizer2)
         self.Layout()
@@ -454,27 +461,30 @@ class PanelEscrito(wx.Panel):
 class PanelObjeto(wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.Size(414, 308),
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.Size(613, 360),
                           style=wx.TAB_TRAVERSAL)
 
         fgSizer2 = wx.FlexGridSizer(0, 2, 0, 0)
         fgSizer2.AddGrowableCol(1)
+        fgSizer2.AddGrowableRow(1)
         fgSizer2.AddGrowableRow(2)
         fgSizer2.SetFlexibleDirection(wx.BOTH)
         fgSizer2.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
 
-        self.m_staticText30 = wx.StaticText(self, wx.ID_ANY, u"Pertenece a:", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText30 = wx.StaticText(self, wx.ID_ANY, u"Pertenece a:", wx.DefaultPosition, wx.DefaultSize,
+                                            wx.ALIGN_RIGHT)
         self.m_staticText30.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText30, 0, wx.ALL, 5)
+        fgSizer2.Add(self.m_staticText30, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
 
         self.lblObjetoRelacionado = wx.StaticText(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-                                                  0)
+                                                  0 | wx.BORDER_RAISED)
         self.lblObjetoRelacionado.Wrap(-1)
 
         fgSizer2.Add(self.lblObjetoRelacionado, 1, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText19 = wx.StaticText(self, wx.ID_ANY, u"Descripción", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText19 = wx.StaticText(self, wx.ID_ANY, u"Descripción", wx.DefaultPosition, wx.DefaultSize,
+                                            wx.ALIGN_RIGHT)
         self.m_staticText19.Wrap(-1)
 
         fgSizer2.Add(self.m_staticText19, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
@@ -483,18 +493,22 @@ class PanelObjeto(wx.Panel):
                                          wx.TE_MULTILINE)
         fgSizer2.Add(self.tcDescripcion, 1, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText20 = wx.StaticText(self, wx.ID_ANY, u"Ubicación Fisica", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText20 = wx.StaticText(self, wx.ID_ANY, u"Ubicación\nFisica", wx.DefaultPosition, wx.DefaultSize,
+                                            wx.ALIGN_RIGHT)
+        self.m_staticText20.SetLabelMarkup(u"Ubicación\nFisica")
         self.m_staticText20.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText20, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText20, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
-        self.tcUbicacionFisica = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+        self.tcUbicacionFisica = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                             wx.TE_MULTILINE)
         fgSizer2.Add(self.tcUbicacionFisica, 0, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText21 = wx.StaticText(self, wx.ID_ANY, u"Fotos", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText21 = wx.StaticText(self, wx.ID_ANY, u"Fotos", wx.DefaultPosition, wx.DefaultSize,
+                                            wx.ALIGN_RIGHT)
         self.m_staticText21.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText21, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText21, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
 
         self.tcFotos = wx.DirPickerCtrl(self, wx.ID_ANY, wx.EmptyString, u"Elija un directorio", wx.DefaultPosition,
                                         wx.DefaultSize, wx.DIRP_DEFAULT_STYLE | wx.DIRP_SMALL)
@@ -503,20 +517,26 @@ class PanelObjeto(wx.Panel):
         self.m_staticText22 = wx.StaticText(self, wx.ID_ANY, u"Ingreso", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText22.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText22, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        fgSizer2.Add(self.m_staticText22, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, 5)
+
+        bSizer26 = wx.BoxSizer(wx.HORIZONTAL)
 
         self.dpIngreso = wx.adv.DatePickerCtrl(self, wx.ID_ANY, wx.DefaultDateTime, wx.DefaultPosition, wx.DefaultSize,
                                                wx.adv.DP_DEFAULT | wx.adv.DP_DROPDOWN)
-        fgSizer2.Add(self.dpIngreso, 0, wx.ALL, 5)
+        bSizer26.Add(self.dpIngreso, 0, wx.ALL, 5)
+
+        bSizer26.Add((0, 0), 1, wx.EXPAND, 5)
 
         self.m_staticText23 = wx.StaticText(self, wx.ID_ANY, u"Salida", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText23.Wrap(-1)
 
-        fgSizer2.Add(self.m_staticText23, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+        bSizer26.Add(self.m_staticText23, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.dpSalida = wx.adv.DatePickerCtrl(self, wx.ID_ANY, wx.DefaultDateTime, wx.DefaultPosition, wx.DefaultSize,
-                                              wx.adv.DP_DEFAULT | wx.adv.DP_DROPDOWN)
-        fgSizer2.Add(self.dpSalida, 0, wx.ALL, 5)
+                                              wx.adv.DP_ALLOWNONE | wx.adv.DP_DEFAULT | wx.adv.DP_DROPDOWN)
+        bSizer26.Add(self.dpSalida, 0, wx.ALL, 5)
+
+        fgSizer2.Add(bSizer26, 1, wx.EXPAND, 5)
 
         self.SetSizer(fgSizer2)
         self.Layout()
@@ -668,7 +688,7 @@ class EdicionObjeto(wx.Dialog):
 
     def __init__(self, parent):
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=u"Edición Objeto", pos=wx.DefaultPosition,
-                           size=wx.Size(363, 346), style=wx.DEFAULT_DIALOG_STYLE)
+                           size=wx.Size(626, 484), style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
@@ -717,7 +737,7 @@ class EdicionEscrito(wx.Dialog):
 
     def __init__(self, parent):
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=u"Edición Escrito", pos=wx.DefaultPosition,
-                           size=wx.Size(667, 574), style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER)
+                           size=wx.Size(716, 654), style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 

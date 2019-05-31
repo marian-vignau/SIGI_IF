@@ -1,3 +1,7 @@
 echo copy to server
 
-robocopy "installer\dist\run" "I:\Gestion Base de Datos IFGCJ\run" /E /XF *.db /XD backup data
+set destiny="\\Nas01\NAS01_Disco01\SIGI-IF"
+
+robocopy "installer\dist\SIGI_IF.exe" %destiny% /E /XF *.db /XD backup data
+
+if not exist "%destiny%\data" mkdir "%destiny%\data"

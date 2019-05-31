@@ -96,6 +96,7 @@ class ctrlEdicionCausa(EdicionCausa):
             self.list.change_item_list(dlg.model, add=True)
 
     def btDeleteEscritoOnButtonClick(self, event):
+        """To delete an escrito."""
         idEscrito = self.list.get_key()
         dlg = EdicionEscrito.ctrlEdicionEscrito(
             self, self.idCausa, idEscrito, delete=True
@@ -105,6 +106,7 @@ class ctrlEdicionCausa(EdicionCausa):
             self.list.delete_item()
 
     def lsEscritosOnLeftDClick(self, event):
+        """On double click, edit escrito."""
         idEscrito = self.list.get_key()
         dlg = EdicionEscrito.ctrlEdicionEscrito(self, self.idCausa, idEscrito)
         dlg.ShowModal()

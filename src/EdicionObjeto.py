@@ -50,6 +50,11 @@ class ctrlEdicionObjeto(EdicionObjeto):
                 if parentobject:
                     self.paObjetoNvo.from_model(parentobject)
                     self.paObjetoNvo.tcDescripcion.Clear()
+            else:
+                escrito = models.get_escrito(idCausa, idEscrito)
+                self.paObjetoNvo.mapper.fechaEntrada.SetValue(escrito.fechaEntrada)
+                self.paObjetoNvo.mapper.fechaSalida.SetValue(escrito.fechaSalida)
+
             self.model = models.TableObjeto()
         else:
             s1 = models.sessions()
