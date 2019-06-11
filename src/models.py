@@ -400,7 +400,11 @@ def make_backup(basedir, filename):
 
 basedir = Path.cwd()
 while not basedir.joinpath("data").is_dir():
-    basedir = basedir.joinpath("..")
+    try:
+        basedir = basedir.joinpath("..")
+    except Exception as e:
+        print("Ensure data directory exists")
+        raise e
 datadir = basedir.joinpath("data")
 datapath = datadir.joinpath(FILEPATH)
 if datapath.is_file():

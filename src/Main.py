@@ -3,12 +3,13 @@ Show main window
 """
 __author__ = "María Andrea Vignau"
 
-
+import wx
 from wxSQAlch import ListViewObject
 from wxSQAlch import Tools
 from vistas import Main
 import models
 import EdicionCausa
+import EdicionUsuario
 
 
 class ctrlMain(Main):
@@ -46,3 +47,8 @@ class ctrlMain(Main):
         dlg = EdicionCausa.ctrlEdicionCausa(self)
         dlg.ShowModal()
         self.list.change_item_list(dlg.model, add=True)
+
+    def mnuEditarUsuarioOnMenuSelection(self, event):
+        app = wx.GetApp()
+        dlg = EdicionUsuario.ctrlEdicionUsuario(self, app.usuario)
+        dlg.ShowModal()

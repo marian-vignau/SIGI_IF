@@ -4,11 +4,14 @@ To start the software
 """
 __author__ = "María Andrea Vignau"
 
-import wx
-import vistas
-import models
-import Main
 import getpass
+
+import wx
+
+import auth
+import vistas
+import EdicionUsuario
+import Main
 
 
 class ctrlLogin(vistas.Login):
@@ -37,18 +40,20 @@ class Login:
         window = ctrlLogin(None)
         window.ShowModal()
         if window.resultado:
-            s1 = models.sessions()
-            userlogin = (
-                s1.query(models.TableUsuario)
-                .filter(models.TableUsuario.id == window.usuario)
-                .first()
-            )
-            if userlogin:
+            self.validate(window)
+        window.Destroy()
+
+    def validate(self, window):
+        self.name = None
+        if auth.test_ldap(window.usuario, window.passw):
+            if auth.test_db(window.usuario):
                 self.name = window.usuario
             else:
-                self.name = None
-        self.name = getpass.getuser()  # disables control of login
-        window.Destroy()
+                dlg = EdicionUsuario.ctrlEdicionUsuario(None)
+                dlg.ShowModal()
+                if dlg.confirm:
+                    self.name = window.usuario
+                dlg.Destroy()
 
 
 class App(wx.App):
@@ -63,6 +68,7 @@ if __name__ == "__main__":
     app = App()
     usuario = Login()
     if usuario.name:
+        app.usuario = usuario
         window = Main.ctrlMain(None)
 
         window.Show()
