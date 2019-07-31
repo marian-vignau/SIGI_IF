@@ -6,6 +6,7 @@ import configparser
 import ldap
 import models
 
+
 def init():
     cfg = configparser.ConfigParser()
     cfg.read("config.ini")

@@ -36,7 +36,8 @@ class MapObj(object):
         """Special getter for"""
         w = self.widget.GetValue()
         if w.IsValid():
-            d = datetime.date(w.year, w.month, w.day)
+            print(w.year, w.month, w.day)
+            d = datetime.date(w.year, w.month + 1, w.day)
             return d
         else:
             return None
@@ -44,7 +45,7 @@ class MapObj(object):
     def SetDateValue(self, value):
         w = wx.DateTime()
         if not value is None:
-            w.Set(value.day, value.month, value.year)
+            w.Set(value.day, value.month - 1, value.year)
         self.widget.SetValue(w)
 
     def GetValue(self):

@@ -2,4 +2,5 @@
 *.pyd
 *.7z
 /.idea
+
 db*.db

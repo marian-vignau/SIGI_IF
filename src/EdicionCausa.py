@@ -197,15 +197,19 @@ class ctrlEdicionCausa(EdicionCausa):
             self.trcObjetos.SetItemData(child, dlg.idObjeto)
 
     def btDeleteObjetoOnButtonClick(self, event):
-        item = self.trcObjetos.GetSelection()
+        item = self.last_selected_item
         if self.trcObjetos.GetChildrenCount(item):
             wx.MessageDialog(
                 self, "Debe borrar los objetos relacionados antes"
             ).ShowModal()
         else:
             idObjeto = self.trcObjetos.GetItemData(item)
+            idObjRelacionado = self.trcObjetos.GetItemParent(item)
             dlg = EdicionObjeto.ctrlEdicionObjeto(
-                self, idCausa=self.model.idCausa, idObjeto=idObjeto, delete=True
+                self,
+                ObjetoRelacionado=self.trcObjetos.GetItemText(idObjRelacionado),
+                idObjetoRelacionado=self.trcObjetos.GetItemData(idObjRelacionado),
+                idCausa=self.model.idCausa, idObjeto=idObjeto, delete=True
             )
             dlg.ShowModal()
             if not dlg.error:
@@ -218,8 +222,13 @@ class ctrlEdicionCausa(EdicionCausa):
             self.last_selected_item = item
             idObjeto = self.trcObjetos.GetItemData(item)
             if not idObjeto is None:
+                idObjRelacionado = self.trcObjetos.GetItemParent(item)
                 dlg = EdicionObjeto.ctrlEdicionObjeto(
-                    self, idCausa=self.model.idCausa, idObjeto=idObjeto
+                    self,
+                    ObjetoRelacionado=self.trcObjetos.GetItemText(idObjRelacionado),
+                    idObjetoRelacionado=self.trcObjetos.GetItemData(idObjRelacionado),
+                    idCausa=self.model.idCausa,
+                    idObjeto=idObjeto
                 )
                 dlg.ShowModal()
                 try:
