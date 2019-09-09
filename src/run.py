@@ -7,9 +7,10 @@ __author__ = "María Andrea Vignau"
 import getpass
 
 import wx
-
 import auth
+
 import vistas
+import models
 import EdicionUsuario
 import Main
 
@@ -65,6 +66,7 @@ class App(wx.App):
 
 
 if __name__ == "__main__":
+    models.run_model()
     app = App()
     usuario = Login()
     if usuario.name:

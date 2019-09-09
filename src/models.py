@@ -397,6 +397,13 @@ def make_backup(basedir, filename):
         if not Path.is_file(backupdir.joinpath(backupname)):
             raise (FileNotFoundError, "Backup failed " + str(backupdir.joinpath(backupname)))
 
+def run_model():
+    global basedir
+    global datapath
+    global datadir
+    if datapath.is_file():
+        make_backup(basedir, datapath)
+    init_engine()
 
 basedir = Path.cwd()
 while not basedir.joinpath("data").is_dir():
@@ -407,6 +414,3 @@ while not basedir.joinpath("data").is_dir():
         raise e
 datadir = basedir.joinpath("data")
 datapath = datadir.joinpath(FILEPATH)
-if datapath.is_file():
-    make_backup(basedir, datapath)
-init_engine()
