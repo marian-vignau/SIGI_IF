@@ -1,10 +1,21 @@
 """
 To merge two databases into one
-First, using the sqlalchemy model take all data
-After, add every objecto to the new database
+
+First, create a new database & copy schema & data from master database
+Cycle through tables, migrate first the ones without relationships dependents from others
+After migrating this, continue with other dependent
+Compute new primary keys (pk), necessary to avoid collision to first db pk
+Create a transform list of lambda functions to compute new row values
+Using this transform list, append new data coming from second database
+
+Note:
+    Added database schema must be a equal or a subset of Master database
+    Tables must have the same fields
 """
+
 import sqlite3
 from pprint import pprint
+
 
 class Verbose(object):
     """Log many thing. """
@@ -19,6 +30,7 @@ class Verbose(object):
         if self.level:
             pprint(*args, **kwargs)
 
+
 class Row(object):
     def __init__(self, row, pks=[]):
         self.row = row
@@ -26,13 +38,16 @@ class Row(object):
         self.keys = row.keys
 
     def apply_transform(self, transform):
-        return ', '.join(["'%s'" % transform[k](self.row[k]) for k in self.row.keys()])
+        return [transform[k](self.row[k]) for k in self.row.keys()]
 
     def values(self):
-        return ', '.join(["'%s'" % self.row[k] for k in self.row.keys()])
+        return [self.row[k] for k in self.row.keys()]
 
     def list_fields(self):
         return ', '.join(list(self.row.keys()))
+
+    def question_marks(self):
+        return ', '.join(["?" for k in self.row.keys()])
 
     @property
     def pk(self):
@@ -81,7 +96,6 @@ class Table(object):
 
         q = self.db.pragma("table_info", self.name)
         self.pk = [row["name"] for row in q if row["pk"] != 0]
-
         self.transform = {row["name"]: (lambda n: n) for row in q}
 
     def evaluate_pk_transformation(self):
@@ -191,9 +205,9 @@ class Database(object):
         for row in q.fetchall():
             yield Row(row, self[table].pk)
 
-    def execute(self, sql):
+    def execute(self, sql, variables=[]):
         """Convenience function to execute a query"""
-        return self.con.cursor().execute(sql)
+        return self.con.cursor().execute(sql, variables)
 
     def list_create_statements(self):
         """List all tables definitions"""
@@ -252,33 +266,39 @@ class AppendDatabase(object):
         self.copy_master()
 
     def copy_master(self):
+        """Copy first database into a new db"""
         for table_name, sql in self.master.list_create_statements():
             self.new.execute(sql)
             log(sql)
+            sql = False
             for row in self.master.select(table_name):
-                sql = f"""INSERT INTO {table_name} ({row.list_fields()})
-                    VALUES ({row.values()});
-                    """
-                self.new.execute(sql)
+                if not sql:
+                    sql = f"""INSERT INTO {table_name} ({row.list_fields()})
+                        VALUES ({row.question_marks()});
+                        """
+                self.new.execute(sql, row.values())
+            self.new.con.commit()
 
     def migrate(self, table_name):
+        """Migrate one table, adding the new rows"""
         transform = self.master[table_name].eval_transform()
         # log(repr(self.master[table_name]))
+        sql = False
         for nro, row in enumerate(self.added.select(table_name)):
             log(":", row)
-            sql = f"""INSERT INTO {table_name} ({row.list_fields()})
-                VALUES ({row.apply_transform(transform)});
-                """
-            log(sql)
-            self.new.execute(sql)
+            if not sql:
+                sql = f"""INSERT INTO {table_name} ({row.list_fields()})
+                    VALUES ({row.question_marks()});
+                    """
+                log(sql)
+            self.new.execute(sql, row.apply_transform(transform))
             if nro % 5:
                 self.new.con.commit()
         self.new.con.commit()
 
     def append_db(self):
+        """Append second datebase to new database"""
         for table_name in self.master.walk_tables_dependencies():
-            if table_name == "TableUsuario":
-                print("")
             self.migrate(table_name)
 
 
@@ -292,7 +312,7 @@ pp = v.verbose_pprint
 if __name__ == '__main__':
     master = r"\\NAS01\NAS01_Disco01\run\data\data_added.db"
     added = r"\\NAS01\NAS01_Disco01\run\data\database.db"
-    new = r"\\NAS01\NAS01_Disco01\run\data\new_002.db"
+    new = r"\\NAS01\NAS01_Disco01\run\data\new_006.db"
     app = AppendDatabase(master, added, new)
     #log(app.master)
     app.append_db()
